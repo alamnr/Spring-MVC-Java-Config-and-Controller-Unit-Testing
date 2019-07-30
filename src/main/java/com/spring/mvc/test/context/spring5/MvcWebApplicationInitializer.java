@@ -2,10 +2,9 @@ package com.spring.mvc.test.context.spring5;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class MvcWebApplicationInitializer // extends AbstractAnnotationConfigDispatcherServletInitializer 
+public class MvcWebApplicationInitializer  extends AbstractAnnotationConfigDispatcherServletInitializer 
 {
-
-	/*
+	
 	   @Override
 	   protected Class<?>[] getRootConfigClasses() {
 	      return null;
@@ -20,5 +19,5 @@ public class MvcWebApplicationInitializer // extends AbstractAnnotationConfigDis
 	   protected String[] getServletMappings() {
 	      return new String[] { "/" };
 	   }
-*/
+
 	}

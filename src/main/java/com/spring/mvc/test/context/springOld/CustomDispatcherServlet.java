@@ -13,7 +13,7 @@ public class CustomDispatcherServlet implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		
+		/*
 		AnnotationConfigWebApplicationContext dispatcherServletContext = new AnnotationConfigWebApplicationContext();
 		
 		dispatcherServletContext.register(DispatcherServletContext.class);
@@ -27,8 +27,8 @@ public class CustomDispatcherServlet implements WebApplicationInitializer {
 		
 		// Add servlet mapping url
 		dispatcher.addMapping("/");
-		
-
+	
+*/
 	}
 
 }
