@@ -98,7 +98,7 @@ public class MvcWebConfig implements WebMvcConfigurer {
       registry.addInterceptor(localeChangeInterceptor);
    }
    
-   @Bean("messageSource")
+  /* @Bean("messageSource")
    public MessageSource messageSource()
    {
 	   ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -106,7 +106,7 @@ public class MvcWebConfig implements WebMvcConfigurer {
 	   messageSource.setDefaultEncoding("UTF-8");
 	   messageSource.setUseCodeAsDefaultMessage(true);
 	   return messageSource;
-   }
+   }*/
    
    
    

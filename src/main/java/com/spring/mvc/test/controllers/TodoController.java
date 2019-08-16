@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
 
 @Controller
-
+@SessionAttributes("todo")
 public class TodoController {
 	
 	private final TodoService service;
@@ -54,7 +56,7 @@ public class TodoController {
 	}
 	
 	@RequestMapping(value="/todo/save", method=RequestMethod.POST)
-	public String saveTodo( @ModelAttribute("todo") @Valid Todo todo,Errors errors ,Model model)
+	public String saveTodo( @ModelAttribute("todo") @Valid Todo todo,Errors errors ,SessionStatus sessionStatus, Model model)
 	{
 		
 		System.out.println(todo);
@@ -67,6 +69,7 @@ public class TodoController {
 		
 		this.service.addTodo(todo);
 		System.out.println("Saving todo");
+		sessionStatus.setComplete();
 		return "redirect:/";
 	}
 	
