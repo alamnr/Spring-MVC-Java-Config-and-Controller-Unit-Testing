@@ -7,7 +7,7 @@ public class MvcWebApplicationInitializer  extends AbstractAnnotationConfigDispa
 	
 	   @Override
 	   protected Class<?>[] getRootConfigClasses() {
-	      return null;
+	      return new Class[] { MyApplicationContext.class };
 	   }
 
 	   @Override
