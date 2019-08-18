@@ -92,7 +92,10 @@ public class Todo {
 
 	}
 	
-	
+	 public void update(String description, String title) {
+	        this.description = description;
+	        this.title = title;
+	    }
 
 	@Override
 	public String toString() {

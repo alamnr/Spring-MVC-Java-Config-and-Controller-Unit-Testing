@@ -1,13 +1,19 @@
 package com.spring.mvc.test.controllers;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,16 +21,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.mvc.test.dto.TodoDTO;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
+
+import com.spring.mvc.test.exception.TodoNotFoundException;
 
 @Controller
 @SessionAttributes("todo")
 public class TodoController {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TodoController.class);
+
+	protected static final String FEEDBACK_MESSAGE_KEY_TODO_ADDED = "feedback.message.todo.added";
+	protected static final String FEEDBACK_MESSAGE_KEY_TODO_UPDATED = "feedback.message.todo.updated";
+	protected static final String FEEDBACK_MESSAGE_KEY_TODO_DELETED = "feedback.message.todo.deleted";
+	protected static final String FLASH_MESSAGE_KEY_FEEDBACK = "feedbackMessage";
+
+	protected static final String MODEL_ATTRIBUTE_TODO = "todo";
+	protected static final String MODEL_ATTRIBUTE_TODO_LIST = "todos";
+
+	protected static final String PARAMETER_TODO_ID = "id";
+
+	protected static final String REQUEST_MAPPING_TODO_LIST = "/";
+	protected static final String REQUEST_MAPPING_TODO_VIEW = "/todo/{id}";
+
+	protected static final String VIEW_TODO_ADD = "todo/todo_add";
+	protected static final String VIEW_TODO_LIST = "todo/todo_list";
+	protected static final String VIEW_TODO_UPDATE = "todo/todo_update";
+	protected static final String VIEW_TODO_VIEW = "todo/todo_details";
+
 	private final TodoService service;
-	
+
 	private final MessageSource messageSource;
 
 	@Autowired
@@ -33,50 +63,131 @@ public class TodoController {
 		this.service = service;
 		this.messageSource = messageSource;
 	}
+
 	
-	@RequestMapping(value="/",method = RequestMethod.GET)
-	public String findAllTodo(Model model)
-	{
-		model.addAttribute("todoList",service.findAll());
-		return "todo/todo_list";
-	}
-	
-	
-	@RequestMapping(value="/todo/{todoId}")
-	public String findById(@PathVariable("todoId") Long todoId, Model model)
-	{
-		model.addAttribute("todo",service.findById(todoId));
-		return "todo/todo_details";
-	}
-	
-	@RequestMapping(value="/todo/add", method= RequestMethod.GET)
-	public String addNewTodo(Model model)
-	{
+	@RequestMapping(value = "/todo/add", method = RequestMethod.GET)
+	public String showAddTodoForm(Model model) {
+		LOGGER.debug("Rendering add to-do entry form.");
+		TodoDTO formObject = new TodoDTO();
+        model.addAttribute(MODEL_ATTRIBUTE_TODO, formObject);
+
 		return "todo/todo_add";
 	}
-	
-	@RequestMapping(value="/todo/save", method=RequestMethod.POST)
-	public String saveTodo( @ModelAttribute("todo") @Valid Todo todo,Errors errors ,SessionStatus sessionStatus, Model model)
-	{
-		
-		System.out.println(todo);
-		if(!errors.hasErrors()) {
-			System.out.println("The Todo validated");
-		}
-		if(errors.hasErrors()) {
+
+	@RequestMapping(value = "/todo/add", method = RequestMethod.POST)
+	public String saveTodo(@ModelAttribute("todo") @Valid TodoDTO todoDTO, Errors errors, SessionStatus sessionStatus,
+			Model model, RedirectAttributes attributes) {
+		LOGGER.debug("Adding a new to-do entry with information: {}", todoDTO);
+		if (errors.hasErrors()) {
+			LOGGER.debug("Add to-do form was submitted with binding errors. Rendering form view.");
 			return "todo/todo_add";
 		}
-		
-		this.service.addTodo(todo);
+
+		this.service.addTodo(todoDTO);
 		System.out.println("Saving todo");
 		sessionStatus.setComplete();
-		return "redirect:/";
+		addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_TODO_ADDED, todoDTO.getTitle());
+		attributes.addAttribute(PARAMETER_TODO_ID, todoDTO.getId());
+
+		return createRedirectViewPath(REQUEST_MAPPING_TODO_VIEW);
+
 	}
 	
-	@ModelAttribute("todo")
-	public Todo getTodo() {
-		return new Todo();
+
+    @RequestMapping(value = "/todo/delete/{id}", method = RequestMethod.GET)
+    public String deleteById(@PathVariable("id") Long id, RedirectAttributes attributes) throws TodoNotFoundException {
+        LOGGER.debug("Deleting a to-do entry with id: {}", id);
+
+        Todo deleted = service.deleteById(id);
+        LOGGER.debug("Deleted to-do entry with information: {}", deleted);
+
+        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_TODO_DELETED, deleted.getTitle());
+
+        return createRedirectViewPath(REQUEST_MAPPING_TODO_LIST);
+    }
+    
+    @RequestMapping(value = REQUEST_MAPPING_TODO_LIST, method = RequestMethod.GET)
+	public String findAllTodo(Model model) {
+		LOGGER.debug("Rendering to-do list.");
+		List<Todo> models = service.findAll();
+        LOGGER.debug("Found {} to-do entries.", models.size());
+
+		model.addAttribute("todoList", models);
+		
+		return VIEW_TODO_LIST;
 	}
+
+	@RequestMapping(value = REQUEST_MAPPING_TODO_VIEW, method=RequestMethod.GET)
+	public String findById(@PathVariable("id") Long todoId, Model model) {
+		LOGGER.debug("Rendering to-do page for to-do entry with id: {}", todoId);
+
+        Todo found = service.findById(todoId);
+        LOGGER.debug("Found to-do entry with information: {}", found);
+
+        model.addAttribute(MODEL_ATTRIBUTE_TODO, found);
+
+		return REQUEST_MAPPING_TODO_VIEW;
+	}
+
+	@RequestMapping(value = "/todo/update/{id}", method = RequestMethod.GET)
+    public String showUpdateTodoForm(@PathVariable("id") Long id, Model model) throws TodoNotFoundException {
+        LOGGER.debug("Rendering update to-do entry form for to-do entry with id: {}", id);
+
+        Todo updated = service.findById(id);
+        LOGGER.debug("Rendering update to-do form for to-do with information: {}", updated);
+
+        TodoDTO formObject = constructFormObjectForUpdateForm(updated);
+        model.addAttribute(MODEL_ATTRIBUTE_TODO, formObject);
+
+        return VIEW_TODO_UPDATE;
+    }
 	
+	 @RequestMapping(value = "/todo/update", method = RequestMethod.POST)
+	    public String update(@Valid @ModelAttribute(MODEL_ATTRIBUTE_TODO) TodoDTO dto, BindingResult result, RedirectAttributes attributes) throws TodoNotFoundException {
+	        LOGGER.debug("Updating a to-do entry with information: {}", dto);
+
+	        if (result.hasErrors()) {
+	            LOGGER.debug("Update to-do entry form was submitted with validation errors. Rendering form view.");
+	            return VIEW_TODO_UPDATE;
+	        }
+
+	        Todo updated = service.update(dto);
+	        LOGGER.debug("Updated the information of a to-entry to: {}", updated);
+
+	        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_TODO_UPDATED, updated.getTitle());
+	        attributes.addAttribute(PARAMETER_TODO_ID, updated.getId());
+
+	        return createRedirectViewPath(REQUEST_MAPPING_TODO_VIEW);
+	    }
+
+	private TodoDTO constructFormObjectForUpdateForm(Todo updated) {
+		TodoDTO dto = new TodoDTO();
+
+		dto.setId(updated.getId());
+		dto.setDescription(updated.getDescription());
+		dto.setTitle(updated.getTitle());
+
+		return dto;
+	}
+
+	private void addFeedbackMessage(RedirectAttributes attributes, String messageCode, Object... messageParameters) {
+		LOGGER.debug("Adding feedback message with code: {} and params: {}", messageCode, messageParameters);
+		String localizedFeedbackMessage = getMessage(messageCode, messageParameters);
+		LOGGER.debug("Localized message is: {}", localizedFeedbackMessage);
+		attributes.addFlashAttribute(FLASH_MESSAGE_KEY_FEEDBACK, localizedFeedbackMessage);
+	}
+
+	private String getMessage(String messageCode, Object... messageParameters) {
+		Locale current = LocaleContextHolder.getLocale();
+		LOGGER.debug("Current locale is {}", current);
+		return messageSource.getMessage(messageCode, messageParameters, current);
+	}
+
+	private String createRedirectViewPath(String requestMapping) {
+		StringBuilder redirectViewPath = new StringBuilder();
+		redirectViewPath.append("redirect:");
+		redirectViewPath.append(requestMapping);
+		return redirectViewPath.toString();
+	}
 
 }

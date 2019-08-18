@@ -1,4 +1,4 @@
-package com.spring.mvc.test.controller;
+package com.spring.mvc.test.controllers;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;

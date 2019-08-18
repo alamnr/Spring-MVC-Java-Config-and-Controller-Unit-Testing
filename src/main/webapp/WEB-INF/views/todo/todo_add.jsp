@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<spring:url value="/todo/save" var="urlValue"></spring:url>
+	<spring:url value="/todo/add" var="urlValue"></spring:url>
 	<form:form action="${urlValue}" method="post" modelAttribute="todo">
 	<form:errors></form:errors>
 		<label>Title :</label><form:input path="title" id="todoTitle" /><form:errors path="title"/>
