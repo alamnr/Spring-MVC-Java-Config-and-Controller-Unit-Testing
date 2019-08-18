@@ -7,8 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class Todo {
 
-	public static final int MAX_LENGTH_DESCRIPTION = 10;
-	public static final int MAX_LENGTH_TITLE = 10;
+	public static final int MAX_LENGTH_DESCRIPTION = 100;
+	public static final int MAX_LENGTH_TITLE = 300;
 
 	private Long id;
 

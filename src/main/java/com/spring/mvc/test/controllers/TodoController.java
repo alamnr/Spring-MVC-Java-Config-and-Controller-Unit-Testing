@@ -83,11 +83,11 @@ public class TodoController {
 			return "todo/todo_add";
 		}
 
-		this.service.addTodo(todoDTO);
+		Todo added = this.service.addTodo(todoDTO);
 		System.out.println("Saving todo");
 		sessionStatus.setComplete();
-		addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_TODO_ADDED, todoDTO.getTitle());
-		attributes.addAttribute(PARAMETER_TODO_ID, todoDTO.getId());
+		addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_TODO_ADDED, added.getTitle());
+		attributes.addAttribute(PARAMETER_TODO_ID, added.getId());
 
 		return createRedirectViewPath(REQUEST_MAPPING_TODO_VIEW);
 
