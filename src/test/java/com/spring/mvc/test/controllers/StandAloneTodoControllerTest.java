@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Arrays;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.*;
@@ -23,21 +24,20 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.aop.ThrowsAdvice;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.Validator;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -199,41 +199,60 @@ public class StandAloneTodoControllerTest {
 		assertNull(formObject.getId());
 		assertEquals(formObject.getTitle(), TITLE);
 	}
-	
+
 	@Test
-	public void deleteById_TodoEntryFound_ShouldDeleteTodoEntryAndRenderTodoListView()  throws Exception {
-		
+	public void deleteById_TodoEntryFound_ShouldDeleteTodoEntryAndRenderTodoListView() throws Exception {
+
 		Todo deleted = Todo.getBuilder("Foo").description(DESCRIPTION).build();
 		deleted.setId(ID);
-		
+
 		when(todoServiceMock.deleteById(ID)).thenReturn(deleted);
-		
+
 		String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_TODO_LIST);
-		
-		mockMvc.perform(get("/todo/delete/{id}",ID))
-				.andExpect(status().isMovedTemporarily())
-				.andExpect(view().name(expectedRedirectViewPath))
-		  		.andExpect(flash().attribute(TodoController.FLASH_MESSAGE_KEY_FEEDBACK, is("Todo entry: Foo was deleted.")));
-		
-		
+
+		mockMvc.perform(get("/todo/delete/{id}", ID)).andExpect(status().isMovedTemporarily())
+				.andExpect(view().name(expectedRedirectViewPath)).andExpect(flash()
+						.attribute(TodoController.FLASH_MESSAGE_KEY_FEEDBACK, is("Todo entry: Foo was deleted.")));
+
 		verify(todoServiceMock, times(1)).deleteById(ID);
 		verifyNoMoreInteractions(todoServiceMock);
 	}
-	
+
 	@Test
 	public void deleteById_TodoEntryNotFound_ShouldRender404View() throws Exception {
-		
+
 		when(todoServiceMock.deleteById(ID)).thenThrow(new TodoNotFoundException(""));
-		
-		mockMvc.perform(get("/todo/delete/{id}",ID))
-				.andExpect(status().isNotFound())
+
+		mockMvc.perform(get("/todo/delete/{id}", ID)).andExpect(status().isNotFound())
 				.andExpect(view().name(ErrorController.VIEW_NOT_FOUND))
 				.andExpect(forwardedUrl("/WEB-INF/views/error/404.jsp"));
-		
-		
-		verify(todoServiceMock,times(1)).deleteById(ID);
+
+		verify(todoServiceMock, times(1)).deleteById(ID);
 		verifyNoMoreInteractions(todoServiceMock);
+	}
+
+	@Test
+	public void findAll_ShouldAddTodoEntriesToModelAndRenderTodoListView() throws Exception {
+		Todo first = Todo.getBuilder("Foo").description("Lorem Ipsum").build();
+		first.setId(1L);
+
+		Todo second = Todo.getBuilder("Bar").description("Lorem Ipsum").build();
+		second.setId(2L);
+
+		when(todoServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
+
+		mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name(TodoController.VIEW_TODO_LIST))
+				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_list.jsp"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST, hasSize(2)))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST,
+						hasItem(allOf(hasProperty("id", is(1L)), hasProperty("description", is("Lorem Ipsum")),
+								hasProperty("title", is("Foo"))))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST,
+						hasItem(allOf(hasProperty("id", is(2L)), hasProperty("description", is("Lorem Ipsum")),
+								hasProperty("title", is("Bar"))))));
 		
-		
+		verify(todoServiceMock,times(1)).findAll();
+		verifyNoMoreInteractions(todoServiceMock);
+
 	}
 }

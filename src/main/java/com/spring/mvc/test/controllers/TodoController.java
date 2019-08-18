@@ -112,7 +112,7 @@ public class TodoController {
 		List<Todo> models = service.findAll();
         LOGGER.debug("Found {} to-do entries.", models.size());
 
-		model.addAttribute("todoList", models);
+		model.addAttribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST, models);
 		
 		return VIEW_TODO_LIST;
 	}

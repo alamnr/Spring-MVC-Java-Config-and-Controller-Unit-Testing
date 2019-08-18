@@ -19,7 +19,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${todoList}" var="todo">
+			<c:forEach items="${todos}" var="todo">
 				<tr>
 					<td><a href='<spring:url value="/todo/${todo.id}"></spring:url>'>${todo.id}</a></td>
 					<td>${todo.title}</td>
