@@ -118,7 +118,7 @@ public class TodoController {
 	}
 
 	@RequestMapping(value = REQUEST_MAPPING_TODO_VIEW, method=RequestMethod.GET)
-	public String findById(@PathVariable("id") Long todoId, Model model) {
+	public String findById(@PathVariable("id") Long todoId, Model model) throws TodoNotFoundException {
 		LOGGER.debug("Rendering to-do page for to-do entry with id: {}", todoId);
 
         Todo found = service.findById(todoId);

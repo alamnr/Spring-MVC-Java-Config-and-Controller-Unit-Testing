@@ -48,6 +48,7 @@ import com.spring.mvc.test.TestUtil;
 import com.spring.mvc.test.WebTestConstants;
 import com.spring.mvc.test.controllers.TodoController;
 import com.spring.mvc.test.dto.TodoDTO;
+import com.spring.mvc.test.exception.TodoNotFoundException;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
 
@@ -217,5 +218,22 @@ public class StandAloneTodoControllerTest {
 		
 		verify(todoServiceMock, times(1)).deleteById(ID);
 		verifyNoMoreInteractions(todoServiceMock);
+	}
+	
+	@Test
+	public void deleteById_TodoEntryNotFound_ShouldRender404View() throws Exception {
+		
+		when(todoServiceMock.deleteById(ID)).thenThrow(new TodoNotFoundException(""));
+		
+		mockMvc.perform(get("/todo/delete/{id}",ID))
+				.andExpect(status().isNotFound())
+				.andExpect(view().name(ErrorController.VIEW_NOT_FOUND))
+				.andExpect(forwardedUrl("/WEB-INF/views/error/404.jsp"));
+		
+		
+		verify(todoServiceMock,times(1)).deleteById(ID);
+		verifyNoMoreInteractions(todoServiceMock);
+		
+		
 	}
 }

@@ -39,14 +39,18 @@ public class TodoService {
 		return todos;
 	}
 	
-	public Todo findById(Long id) {
+	public Todo findById(Long id) throws TodoNotFoundException {
 		
-		Todo todo = todos.stream()
+		Todo found = todos.stream()
 				.filter(obj->obj.getId().equals(id))
 				.findAny()
 				.orElse(null);
 		
-		return  todo;
+		if (found == null) {
+            throw new TodoNotFoundException("No to-entry found with id: " + id);
+        }
+		
+		return  found;
 		
 	}
 	
@@ -62,7 +66,7 @@ public class TodoService {
 		
 	}
 
-	public Todo deleteById(Long id) {
+	public Todo deleteById(Long id) throws TodoNotFoundException {
 		LOGGER.debug("Deleting a to-do entry with id: {}", id);
 
         Todo deleted = findById(id);
