@@ -126,7 +126,7 @@ public class TodoController {
 
         model.addAttribute(MODEL_ATTRIBUTE_TODO, found);
 
-		return REQUEST_MAPPING_TODO_VIEW;
+		return VIEW_TODO_VIEW;
 	}
 
 	@RequestMapping(value = "/todo/update/{id}", method = RequestMethod.GET)

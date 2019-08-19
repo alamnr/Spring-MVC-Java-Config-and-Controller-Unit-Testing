@@ -255,4 +255,29 @@ public class StandAloneTodoControllerTest {
 		verifyNoMoreInteractions(todoServiceMock);
 
 	}
+	
+	@Test
+	public void findById_TodoEntryFound_ShouldAddTodoEntryToModelAndRenderViewTodoEntryView()  throws Exception
+	{
+		Todo found = Todo.getBuilder("Foo").description("Lorem Ipsum").build();
+		found.setId(ID);
+		
+		when(todoServiceMock.findById(ID)).thenReturn(found);
+		
+		mockMvc.perform(get("/todo/{id}",ID))
+				.andExpect(status().isOk())
+				.andExpect(view().name(TodoController.VIEW_TODO_VIEW))
+				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_details.jsp"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id",is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,hasProperty("description", is("Lorem Ipsum"))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",is("Foo"))));
+				
+		
+		verify(todoServiceMock, times(1)).findById(ID);
+		verifyNoMoreInteractions(todoServiceMock);
+				
+		
+		
+	}
+	
 }
