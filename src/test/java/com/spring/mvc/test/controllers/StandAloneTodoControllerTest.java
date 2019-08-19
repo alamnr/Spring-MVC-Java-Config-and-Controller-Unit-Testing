@@ -52,6 +52,8 @@ import com.spring.mvc.test.exception.TodoNotFoundException;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
 
+
+
 @ExtendWith(MockitoExtension.class)
 public class StandAloneTodoControllerTest {
 
@@ -313,4 +315,123 @@ public class StandAloneTodoControllerTest {
 		verifyNoMoreInteractions(todoServiceMock);
 	}
 	
+	@Test
+	public void showUpdateTodoForm_TodoEntryNotFound_ShouldRender404View() throws Exception
+	{
+		when(todoServiceMock.findById(ID)).thenThrow(new TodoNotFoundException(""));
+		
+		mockMvc.perform(get("/todo/update/{id}",ID))
+		.andExpect(status().isNotFound())
+		.andExpect(view().name(ErrorController.VIEW_NOT_FOUND))
+		.andExpect(forwardedUrl("/WEB-INF/views/error/404.jsp"));
+		
+		verify(todoServiceMock,times(1)).findById(ID);
+		verifyNoMoreInteractions(todoServiceMock);
+	}
+	
+	
+	@Test
+	public void update_EmptyTodoEntry_ShouldRenderFormViewAndReturnValidationErrorForTitle() throws Exception
+	{
+		mockMvc.perform(post("/todo/update")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param(WebTestConstants.FORM_FIELD_ID, ID.toString())
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))  
+				.andExpect(status().isOk())
+				.andExpect(view().name(TodoController.VIEW_TODO_UPDATE))
+				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_update.jsp"))
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "title"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id", is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("description",isEmptyOrNullString())))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",isEmptyOrNullString())));
+		
+		verifyZeroInteractions(todoServiceMock);
+		
+	}
+	
+	@Test
+	public void update_TitleAndDescriptionAreTooLong_ShouldRenderFormViewAndReturnValidationErrorsForTitleAndDescription() throws Exception
+	{
+		String title = TestUtil.createStringWithLength(Todo.MAX_LENGTH_TITLE+1);
+		String description = TestUtil.createStringWithLength(Todo.MAX_LENGTH_DESCRIPTION+1);
+		
+		mockMvc.perform(post("/todo/update")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param(WebTestConstants.FORM_FIELD_DESCRIPTION, description)
+				.param(WebTestConstants.FORM_FIELD_TITLE, title)
+				.param(WebTestConstants.FORM_FIELD_ID, ID.toString())
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))
+				.andExpect(status().isOk())
+				.andExpect(view().name(TodoController.VIEW_TODO_UPDATE))
+				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_update.jsp"))
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "title"))
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "description"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id",is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("description",is(description))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",is(title))));
+		
+		verifyZeroInteractions(todoServiceMock);
+			
+	}
+	
+	@Test
+	public void update_TodoEntryFound_ShouldUpdateTodoEntryAndRenderViewTodoEntryView() throws Exception
+	{
+		Todo updated = Todo.getBuilder("Foo").description("Lorem Ipsum").build();
+		updated.setId(ID);
+		
+		when(todoServiceMock.update(isA(TodoDTO.class))).thenReturn(updated);
+		
+		 String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_TODO_VIEW);
+
+		
+		mockMvc.perform(post("/todo/update")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param(WebTestConstants.FORM_FIELD_ID, ID.toString())
+				.param(WebTestConstants.FORM_FIELD_TITLE, TITLE)
+				.param(WebTestConstants.FORM_FIELD_DESCRIPTION, DESCRIPTION)
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))
+				.andExpect(status().isMovedTemporarily())
+				.andExpect(view().name(expectedRedirectViewPath))
+				.andExpect(model().attribute(TodoController.PARAMETER_TODO_ID, is("1")))
+				.andExpect(flash().attribute(TodoController.FLASH_MESSAGE_KEY_FEEDBACK, is("Todo entry: Foo was updated.")));
+		
+
+        ArgumentCaptor<TodoDTO> formObjectArgument = ArgumentCaptor.forClass(TodoDTO.class);
+        verify(todoServiceMock, times(1)).update(formObjectArgument.capture());
+        verifyNoMoreInteractions(todoServiceMock);
+
+        TodoDTO formObject = formObjectArgument.getValue();
+
+        assertEquals(formObject.getDescription(), DESCRIPTION);
+        assertEquals(formObject.getId(), ID);
+        assertEquals(formObject.getTitle(), TITLE);
+				
+	}
+	
+	 @Test
+	    public void update_TodoEntryNotFound_ShouldRender404View() throws Exception {
+	        when(todoServiceMock.update(isA(TodoDTO.class))).thenThrow(new TodoNotFoundException(""));
+
+	        mockMvc.perform(post("/todo/update")
+	                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+	                .param(WebTestConstants.FORM_FIELD_DESCRIPTION, DESCRIPTION)
+	                .param(WebTestConstants.FORM_FIELD_ID, ID.toString())
+	                .param(WebTestConstants.FORM_FIELD_TITLE, TITLE)
+	                .sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO())
+	        )
+	                .andExpect(status().isNotFound())
+	                .andExpect(view().name(ErrorController.VIEW_NOT_FOUND))
+	                .andExpect(forwardedUrl("/WEB-INF/views/error/404.jsp"));
+
+	        ArgumentCaptor<TodoDTO> formObjectArgument = ArgumentCaptor.forClass(TodoDTO.class);
+	        verify(todoServiceMock, times(1)).update(formObjectArgument.capture());
+	        verifyNoMoreInteractions(todoServiceMock);
+
+	        TodoDTO formObject = formObjectArgument.getValue();
+
+	        assertEquals(formObject.getDescription(), DESCRIPTION);
+	        assertEquals(formObject.getId(), ID);
+	        assertEquals(formObject.getTitle(), TITLE);
+	    }
 }
