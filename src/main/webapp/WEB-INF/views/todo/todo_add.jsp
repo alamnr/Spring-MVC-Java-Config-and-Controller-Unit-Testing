@@ -14,7 +14,7 @@
 	<form:form action="${urlValue}" method="post" modelAttribute="todo">
 	<form:errors></form:errors>
 		<label>Title :</label><form:input path="title" id="todoTitle" /><form:errors path="title"/>
-		<br><label>Description :</label><form:input path="description" id="todoDescription"/><form:errors path="description"/>
+		<br><label>Description :</label><form:textarea path="description" id="todoDescription"/><form:errors path="description"/>
 		<br><form:button>Submit</form:button>
 		
 	</form:form>

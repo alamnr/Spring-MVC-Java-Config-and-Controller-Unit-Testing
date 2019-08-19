@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,9 +8,13 @@
 <title>Todo details</title>
 </head>
 <body>
- <ul>
- <li>Title :  <span>${todo.title }</span></li>
- <li>Description :  <span>${todo.description }</span></li>
- </ul>
+	<ul>
+		<li>Title : <span>${todo.title }</span></li>
+		<li>Description : <span>${todo.description }</span></li>
+	</ul>
+
+	<a href='<spring:url value="/todo/update/${todo.id}"></spring:url>'>Edit</a>
+	<a href="#">Delete</a>
+	<a href='<spring:url value="/"></spring:url>'>Go home</a>
 </body>
 </html>
