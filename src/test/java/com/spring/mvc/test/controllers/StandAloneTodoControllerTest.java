@@ -275,9 +275,42 @@ public class StandAloneTodoControllerTest {
 		
 		verify(todoServiceMock, times(1)).findById(ID);
 		verifyNoMoreInteractions(todoServiceMock);
-				
+		
+	}
+	
+	@Test
+	public void findById_TodoEntryNotFound_ShouldRender404View() throws Exception
+	{
+		when(todoServiceMock.findById(ID)).thenThrow(new TodoNotFoundException(""));
 		
 		
+		mockMvc.perform(get("/todo/{id}",ID))
+		.andExpect(status().isNotFound())
+		.andExpect(view().name(ErrorController.VIEW_NOT_FOUND))
+		.andExpect(forwardedUrl("/WEB-INF/views/error/404.jsp"));
+		
+		verify(todoServiceMock,times(1)).findById(ID);
+		verifyNoMoreInteractions(todoServiceMock);
+	}
+	
+	@Test
+	public void showUpdateTodoForm_TodoEntryFound_ShouldCreateFormObjectAndRenderUpdateTodoView() throws Exception
+	{
+		Todo update = Todo.getBuilder("Foo").description("Lorem Ipsum").build();
+		update.setId(1L);
+		
+		when(todoServiceMock.findById(ID)).thenReturn(update);
+		
+		mockMvc.perform(get("/todo/update/{id}",ID))
+				.andExpect(status().isOk())
+				.andExpect(view().name(TodoController.VIEW_TODO_UPDATE))
+				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_update.jsp"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,hasProperty("id",is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("description",is("Lorem Ipsum"))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",is("Foo"))));
+		
+		verify(todoServiceMock,times(1)).findById(ID);
+		verifyNoMoreInteractions(todoServiceMock);
 	}
 	
 }
