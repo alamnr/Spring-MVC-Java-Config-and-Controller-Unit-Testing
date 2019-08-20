@@ -1,4 +1,7 @@
-$(function() {
+
+
+function openDialog(id)
+{
 
     $(".well").on("click", "#delete-todo-link", function(e) {
         e.preventDefault();
@@ -19,6 +22,8 @@ $(function() {
 
     $("#view-holder").on("click", "#delete-todo-button", function(e) {
         e.preventDefault();
-        window.location.href = ctx+"/todo/delete/" + $("#todo-id").text();        
+        //alert(id);
+        window.location.href = ctx+"/todo/delete/" + id;
     });
-});
+
+}

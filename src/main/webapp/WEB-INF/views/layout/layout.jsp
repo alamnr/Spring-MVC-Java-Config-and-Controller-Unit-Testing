@@ -41,12 +41,13 @@
 							<li><a href='<spring:url value="/"></spring:url>'><spring:message
 										code="label.navigation.homepage.link" /></a></li>
 						</ul>
-
-						<p>
-							<a class="dropdown-item" href="?lang=en"><span>English</span></a>
-							| <a class="dropdown-item" href="?lang=hi"><span>Hindi</span></a>|
-							<a class="dropdown-item" href="?lang=cn"><span>Chinese</span></a>
-						</p>
+				
+					
+						<span class="navbar-text " >
+							<a href="?lang=en"><span>English</span></a>
+							| <a href="?lang=hi"><span>Hindi</span></a>|
+							<a href="?lang=cn"><span>Chinese</span></a>
+						</span>
 					</div>
 				</div>
 			</div>
@@ -65,7 +66,7 @@
 			</div>
 		</div>
 	</div>
-
+	<script>var ctx = "${pageContext.request.contextPath}"</script>
 	<script id="template-alert-message-error"
 		type="text/x-handlebars-template">
         <div id="alert-message-error" class="alert alert-error fade in">

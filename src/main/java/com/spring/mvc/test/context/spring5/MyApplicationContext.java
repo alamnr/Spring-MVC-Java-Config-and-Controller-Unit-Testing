@@ -19,7 +19,7 @@ public class MyApplicationContext {
 
         messageSource.setBasename(MESSAGE_SOURCE_BASE_NAME);
         messageSource.setUseCodeAsDefaultMessage(true);
-
+        messageSource.setDefaultEncoding("utf-8");
         return messageSource;
     }
 }

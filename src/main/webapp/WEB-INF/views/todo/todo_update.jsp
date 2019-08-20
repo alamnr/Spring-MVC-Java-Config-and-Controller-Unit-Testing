@@ -7,18 +7,37 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Todo Update</title>
+<script type="text/javascript" src='<spring:url value="/static/js/todo.form.js"></spring:url>'></script>
 </head>
 <body>
-
+	 <h1><spring:message code="label.todo.update.page.title"/></h1>
+    <div class="well page-content">
 	<spring:url value="/todo/update" var="urlValue"></spring:url>
 	<form:form action="${urlValue}" method="post" modelAttribute="todo">
-		<label>Title :</label><form:input path="title" id="todoTitle" /><form:errors path="title"/>
-		<br><label>Description :</label><form:textarea path="description" id="todoDescription"/><form:errors path="description"/>
-		<br><form:button>Submit</form:button>
-		 <%-- <a href='<spring:url value="/todo/${todo.id}"></spring:url>'>Cancel</a> --%>
-		 <a href='<spring:url value="/"></spring:url>'>Cancel</a>
-	
-	</form:form>
+		<form:hidden path="id"/>
+            <div id="control-group-title" class="control-group">
+                <label for="todo-title"><spring:message code="label.todo.title"/>:</label>
+
+                <div class="controls">
+                    <form:input id="todo-title" path="title"/>
+                    <form:errors id="error-title" path="title" cssClass="help-inline"/>
+                </div>
+            </div>
+            <div id="control-group-description" class="control-group">
+                <label for="todo-description"><spring:message code="label.todo.description"/>:</label>
+
+                <div class="controls">
+                    <form:textarea id="todo-description" path="description"/>
+                    <form:errors id="error-description" path="description" cssClass="help-inline"/>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <a href='<spring:url value="/todo/${todo.id}"></spring:url>' class="btn"><spring:message code="label.cancel"/></a>
+                <button id="update-todo-button" type="submit" class="btn btn-primary"><spring:message
+                        code="label.update.todo.button"/></button>
+            </div>
+        </form:form>
+    </div>
 
 </body>
 </html>
