@@ -1,4 +1,4 @@
-package com.spring.mvc.test.context.springOld;
+package com.spring.mvc.test.config.springOld;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

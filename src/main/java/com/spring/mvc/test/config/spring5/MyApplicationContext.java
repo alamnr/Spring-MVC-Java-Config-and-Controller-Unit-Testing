@@ -1,4 +1,4 @@
-package com.spring.mvc.test.context.spring5;
+package com.spring.mvc.test.config.spring5;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-@Configuration
+/*@Configuration
 @ComponentScan(basePackages= {"com.spring.mvc.test.service"})
-@Import({MvcWebConfig.class})
+@Import({MvcWebConfig.class})*/
 public class MyApplicationContext {
 	private static final String MESSAGE_SOURCE_BASE_NAME = "i18n/welcome";
 

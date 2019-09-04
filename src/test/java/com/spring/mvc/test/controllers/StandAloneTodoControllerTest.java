@@ -46,6 +46,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 import com.spring.mvc.test.TestUtil;
 import com.spring.mvc.test.WebTestConstants;
+import com.spring.mvc.test.common.controller.ErrorController;
 import com.spring.mvc.test.controllers.TodoController;
 import com.spring.mvc.test.dto.TodoDTO;
 import com.spring.mvc.test.exception.TodoNotFoundException;

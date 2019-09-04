@@ -1,4 +1,4 @@
-package com.spring.mvc.test.context.spring5;
+package com.spring.mvc.test.config.spring5;
 
 import java.util.EnumSet;
 
@@ -12,9 +12,9 @@ import javax.servlet.ServletException;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public abstract class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-	@Override
+	/*@Override
 	protected Filter[] getServletFilters() {
 		return new Filter[] { new ConfigurableSiteMeshFilter() };
 	}
@@ -32,6 +32,6 @@ public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispat
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
-	}
+	}*/
 
 }

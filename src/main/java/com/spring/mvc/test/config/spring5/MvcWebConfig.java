@@ -1,4 +1,4 @@
-package com.spring.mvc.test.context.spring5;
+package com.spring.mvc.test.config.spring5;
 
 import java.util.Locale;
 import java.util.Properties;
@@ -24,9 +24,9 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 
 
-@Configuration
+/*@Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.spring.mvc.test.controllers"})
+@ComponentScan(basePackages = {"com.spring.mvc.test.controllers"})*/
 public class MvcWebConfig implements WebMvcConfigurer {
 
    @Override

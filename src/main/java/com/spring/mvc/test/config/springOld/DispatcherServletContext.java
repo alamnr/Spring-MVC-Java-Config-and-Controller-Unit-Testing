@@ -1,4 +1,4 @@
-package com.spring.mvc.test.context.springOld;
+package com.spring.mvc.test.config.springOld;
 
 import java.util.Locale;
 import java.util.Properties;

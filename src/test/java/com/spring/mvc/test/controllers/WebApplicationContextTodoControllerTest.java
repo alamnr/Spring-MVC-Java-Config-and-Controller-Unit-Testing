@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.spring.mvc.test.config.spring5.MvcWebConfig;
 import com.spring.mvc.test.context.TestContext;
-import com.spring.mvc.test.context.spring5.MvcWebConfig;
 import com.spring.mvc.test.service.TodoService;
 
 @ExtendWith(SpringExtension.class)
