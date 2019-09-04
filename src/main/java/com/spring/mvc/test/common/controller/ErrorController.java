@@ -14,6 +14,7 @@ public class ErrorController {
 
     public static final String VIEW_INTERNAL_SERVER_ERROR = "error/error";
     public static final String VIEW_NOT_FOUND = "error/404";
+    public static final String ACCESS_DENIED = "forbidden/accessDenied";
 
     @RequestMapping(value = "/error/404", method = RequestMethod.GET)
     public String show404Page() {
@@ -25,5 +26,11 @@ public class ErrorController {
     public String showInternalServerErrorPage() {
         LOGGER.debug("Rendering internal server error page");
         return VIEW_INTERNAL_SERVER_ERROR;
+    }
+    
+    @RequestMapping(value = "/accessDenied", method = RequestMethod.GET)
+    public String showAccessDeniedErrorPage() {
+        LOGGER.debug("Rendering Access denied error page");
+        return ACCESS_DENIED;
     }
 }
