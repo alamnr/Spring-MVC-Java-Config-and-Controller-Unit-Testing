@@ -6,13 +6,18 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<security:http auto-config="true" use-expressions="false">
-		<security:intercept-url pattern="/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/todo/update/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/todo/view/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/todo/**" access="ROLE_FOO"/>
+		<!-- <security:intercept-url pattern="/" access="ROLE_FOO,ROLE_USER"/> -->
+		<security:intercept-url pattern="/**" access="ROLE_USER,ROLE_FOO" />
 	</security:http>
 	
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:user-service>
 				<security:user name="user" password="{noop}password" authorities="ROLE_USER"/>
+				<security:user name="admin" password="{noop}password" authorities="ROLE_USER,ROLE_FOO"/>
 			</security:user-service>
 		</security:authentication-provider>
 	</security:authentication-manager>
