@@ -21,7 +21,7 @@
         <div class="action-buttons">
             <%-- <a href='<spring:url value="/todo/update/${todo.id}"></spring:url>' class="btn btn-primary"><spring:message code="label.update.todo.link"/></a> --%>
            <%--  <a id="delete-todo-link" class="btn btn-primary"><spring:message code="label.delete.todo.link"/></a> --%>
-            <a href='<spring:url value="/"></spring:url>'  class="btn btn-link"><spring:message code="label.ok"/></a>
+            <a href='<spring:url value="/todos"></spring:url>'  class="btn btn-link"><spring:message code="label.ok"/></a>
         </div>
     </div>
     

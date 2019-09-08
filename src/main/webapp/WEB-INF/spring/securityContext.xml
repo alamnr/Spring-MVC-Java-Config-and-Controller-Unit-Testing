@@ -7,22 +7,49 @@
 
 
 	<bean name="customAccessDeniedHandler"
-		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" /> 
-		
-	<security:http auto-config="true" use-expressions="false">
-		<security:http-basic />
+		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" />
+
+	<bean
+		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"></bean>
+
+	<security:http auto-config="true" use-expressions="true">
+		<!-- <security:http-basic /> -->
+
+		<security:form-login login-page="/login"
+			login-processing-url="/login" username-parameter="custom_userName"
+			password-parameter="custom_password" default-target-url="/"
+			always-use-default-target="true"
+			authentication-failure-url="/login?error=true" />
+
+		<security:logout logout-url="/logout"
+			logout-success-url="/login?logout=true" />
+
 		<security:access-denied-handler
-			ref="customAccessDeniedHandler" /> 
+			ref="customAccessDeniedHandler" />
+
 		<!-- <security:access-denied-handler error-page="/accessDenied"/> -->
+
+
+		<security:intercept-url pattern="/login"
+			access="permitAll" />
+		<security:intercept-url pattern="/loginForm"
+			access="permitAll" />
+		<security:intercept-url pattern="/logout"
+			access="permitAll" />
+		<security:intercept-url pattern="/accessDenied"
+			access="permitAll" />
+		<security:intercept-url pattern="/static/**"
+			access="permitAll" />
 		<security:intercept-url
-			pattern="/todo/update/**" access="ROLE_USER" />
+			pattern="/todo/update/**" access="hasRole('ROLE_USER')" />
 		<security:intercept-url pattern="/todo/view/**"
-			access="ROLE_USER" />
+			access="hasRole('ROLE_USER')" />
 		<security:intercept-url pattern="/todo/**"
-			access="ROLE_FOO" />
+			access="hasRole('ROLE_FOO')" />
 		<!-- <security:intercept-url pattern="/" access="ROLE_FOO,ROLE_USER"/> -->
 		<security:intercept-url pattern="/**"
-			access="ROLE_USER,ROLE_FOO" />
+			access="hasAnyRole('ROLE_USER','ROLE_FOO')" />
+
 
 	</security:http>
 

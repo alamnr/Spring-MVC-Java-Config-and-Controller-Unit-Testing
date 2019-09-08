@@ -45,8 +45,8 @@ public class TodoController {
 
 	protected static final String PARAMETER_TODO_ID = "id";
 
-	protected static final String REQUEST_MAPPING_TODO_LIST = "/";
-	protected static final String REQUEST_MAPPING_TODO_VIEW = "/todo/view/{id}";
+	protected static final String REQUEST_MAPPING_TODO_LIST = "/todos";
+	protected static final String REQUEST_MAPPING_TODO_VIEW = "/todo/{id}";
 
 	protected static final String VIEW_TODO_ADD = "todo/todo_add";
 	protected static final String VIEW_TODO_LIST = "todo/todo_list";

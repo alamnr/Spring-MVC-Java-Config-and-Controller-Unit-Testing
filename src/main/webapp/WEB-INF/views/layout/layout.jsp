@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
 <title><spring:message code="spring.test.mvc.example.title" /></title>
@@ -36,17 +37,37 @@
 					</a> <span class="brand"><spring:message
 							code="label.navigation.brand" /></span>
 
-					<div class="nav-collapse">
+					<div class="nav navbar-nav">
 						<ul class="nav">
 							<li><a href='<spring:url value="/"></spring:url>'><spring:message
 										code="label.navigation.homepage.link" /></a></li>
+							<li><a href='<spring:url value="/todos"></spring:url>'><spring:message
+										code="label.todo.view.page.title" /></a></li>
+										
+							<sec:authorize access="authenticated" var="authenticated">
+								<c:choose>
+									<c:when test="${authenticated}">
+										<li>
+											<p class="navbar-text">
+												Welcome! <sec:authentication property="name"/>
+												<a id="logoutLink" href="#">Logout</a>
+											</p>
+										</li>
+										
+										<form id="logoutForm" action='<c:url value="/logout"/>' method="post">
+											<sec:csrfInput/>
+										</form>
+									</c:when>
+									<c:otherwise>
+									  <li><a href='<spring:url value="/login"/>'>Sign in</a></li>
+									</c:otherwise>
+								</c:choose>
+							</sec:authorize>
 						</ul>
-				
-					
-						<span class="navbar-text " >
-							<a href="?lang=en"><span>English</span></a>
-							| <a href="?lang=hi"><span>Hindi</span></a>|
-							<a href="?lang=cn"><span>Chinese</span></a>
+
+
+						<span class="navbar-text "> <a href="?lang=en"><span>English</span></a>
+							| <a href="?lang=hi"><span>Hindi</span></a>| <a href="?lang=cn"><span>Chinese</span></a>
 						</span>
 					</div>
 				</div>
@@ -80,6 +101,14 @@
             <a class="close" data-dismiss="alert">&times;</a>
             {{message}}
         </div>
+    </script>
+    <script type="text/javascript">
+    	$(document).ready(()=>{
+    		$("#logoutLink").click((e)=>{
+    			e.preventDefault();
+    			$("#logoutForm").submit();
+    		})
+    	})
     </script>
 </body>
 </html>

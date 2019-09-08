@@ -11,7 +11,7 @@
 <body>
 <h2><spring:message code="access.denied.message.part1"></spring:message></h2>
  
-<a href='<spring:url value="/"></spring:url>'/><spring:message code="access.denied.message.part2"></spring:message></a>
+<a href='<spring:url value="/todos"></spring:url>'/><spring:message code="access.denied.message.part2"></spring:message></a>
 
 </body>
 </html>
