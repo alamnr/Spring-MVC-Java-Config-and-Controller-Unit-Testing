@@ -2,14 +2,23 @@ package com.spring.mvc.test.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@Entity
 public class Todo {
 
 	public static final int MAX_LENGTH_DESCRIPTION = 100;
 	public static final int MAX_LENGTH_TITLE = 300;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
 	private Date creationTime;

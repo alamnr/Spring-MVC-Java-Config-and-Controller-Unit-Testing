@@ -50,7 +50,7 @@
 		<security:intercept-url pattern="/**"
 			access="hasAnyRole('ROLE_USER','ROLE_FOO')" />
 
-
+		<security:remember-me key="rememberMe"/>
 	</security:http>
 
 	<security:authentication-manager>

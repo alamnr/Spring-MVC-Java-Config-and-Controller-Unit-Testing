@@ -31,6 +31,10 @@
 				<label for="custom_password"><spring:message code="label.login.password"></spring:message></label>
 				<input type="password" name="custom_password" class="form-control" >
 			</div>
+			<div class="form-group">
+				<label for="remember"><spring:message code="label.login.rememberMe"></spring:message></label>
+				<input type="checkbox" id="remember" name="remember-me"  >
+			</div>
 			<sec:csrfInput/>
 			<button type="submit" id="btn-save" class="btn btn-primary"><spring:message code="label.login.buttonText"></spring:message></button>
 		</form>	
