@@ -6,6 +6,9 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
+	<!-- Disable security on static resources -->
+    <security:http pattern="/static/**" security="none"/>
+
 	<bean name="customAccessDeniedHandler"
 		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" />
 
@@ -38,8 +41,8 @@
 			access="permitAll" />
 		<security:intercept-url pattern="/accessDenied"
 			access="permitAll" />
-		<security:intercept-url pattern="/static/**"
-			access="permitAll" />
+		<!-- <security:intercept-url pattern="/static/**"
+			access="permitAll" /> -->
 		<security:intercept-url
 			pattern="/todo/update/**" access="hasRole('ROLE_USER')" />
 		<security:intercept-url pattern="/todo/view/**"
