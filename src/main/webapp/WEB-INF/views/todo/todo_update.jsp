@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="action-buttons">
-                <a href='<spring:url value="/todo/${todo.id}"></spring:url>' class="btn"><spring:message code="label.cancel"/></a>
+                <a href='<spring:url value="/todos"></spring:url>' class="btn"><spring:message code="label.cancel"/></a>
                 <button id="update-todo-button" type="submit" class="btn btn-primary"><spring:message
                         code="label.update.todo.button"/></button>
             </div>

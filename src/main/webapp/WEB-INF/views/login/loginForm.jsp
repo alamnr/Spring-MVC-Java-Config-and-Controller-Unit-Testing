@@ -25,16 +25,16 @@
 		<form id="loginForm" action="${loginUrl}" method="post">
 			<div class="form-group">
 				<label for="custom_userName"><spring:message code="label.login.userName"></spring:message></label>
-				<input name="custom_userName" class="form-control" >
+				<input name="custom_username" class="form-control" >
 			</div>
 			<div class="form-group">
 				<label for="custom_password"><spring:message code="label.login.password"></spring:message></label>
 				<input type="password" name="custom_password" class="form-control" >
 			</div>
-			<div class="form-group">
+			<%-- <div class="form-group">
 				<label for="remember"><spring:message code="label.login.rememberMe"></spring:message></label>
 				<input type="checkbox" id="remember" name="remember-me"  >
-			</div>
+			</div> --%>
 			<sec:csrfInput/>
 			<button type="submit" id="btn-save" class="btn btn-primary"><spring:message code="label.login.buttonText"></spring:message></button>
 		</form>	

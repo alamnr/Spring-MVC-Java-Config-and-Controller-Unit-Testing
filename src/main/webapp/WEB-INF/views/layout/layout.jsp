@@ -44,7 +44,8 @@
 							<li><a href='<spring:url value="/todos"></spring:url>'><spring:message
 										code="label.todo.view.page.title" /></a></li>
 										
-							<sec:authorize access="authenticated" var="authenticated">
+							<sec:authorize  access="authenticated" var="authenticated"/>
+								
 								<c:choose>
 									<c:when test="${authenticated}">
 										<li>
@@ -62,7 +63,7 @@
 									  <li><a href='<spring:url value="/login"/>'>Sign in</a></li>
 									</c:otherwise>
 								</c:choose>
-							</sec:authorize>
+							
 						</ul>
 
 
