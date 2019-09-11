@@ -3,6 +3,7 @@ package com.spring.mvc.test.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,8 +11,14 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Todo {
 
 	public static final int MAX_LENGTH_DESCRIPTION = 100;
@@ -21,16 +28,24 @@ public class Todo {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
-	private Date creationTime;
-
-	private Date modificationTime;
-
 	@Length(max = MAX_LENGTH_DESCRIPTION, message="Description is too long")
 	private String description;
 
 	@NotEmpty(message="Title should not be empty")
 	@Length(max = MAX_LENGTH_TITLE, message="Title is too long")
 	private String title;
+	
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String lastModifiedBy;
+	
+	@CreatedDate
+	private Date createdDate;
+	
+	@LastModifiedDate
+	private Date lastModifiedDate;
 
 	public Todo() {
 
@@ -44,23 +59,7 @@ public class Todo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Date getCreationTime() {
-		return creationTime;
-	}
-
-	public void setCreationTime(Date creationTime) {
-		this.creationTime = creationTime;
-	}
-
-	public Date getModificationTime() {
-		return modificationTime;
-	}
-
-	public void setModificationTime(Date modificationTime) {
-		this.modificationTime = modificationTime;
-	}
-
+	
 	public String getDescription() {
 		return description;
 	}
@@ -106,10 +105,53 @@ public class Todo {
 	        this.title = title;
 	    }
 
-	@Override
-	public String toString() {
-		return "Todo [id=" + id + ", creationTime=" + creationTime + ", modificationTime=" + modificationTime
-				+ ", description=" + description + ", title=" + title + "]";
+
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Todo [id=" + id + ", description=" + description + ", title=" + title + ", createdBy=" + createdBy
+				+ ", lastModifiedBy=" + lastModifiedBy + ", createdDate=" + createdDate + ", lastModifiedDate="
+				+ lastModifiedDate + "]";
+	}
+
+	
 }

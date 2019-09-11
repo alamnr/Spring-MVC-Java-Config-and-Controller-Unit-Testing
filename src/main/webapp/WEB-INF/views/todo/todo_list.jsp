@@ -32,6 +32,10 @@
 							<th>Id</th>
 							<th>Title</th>
 							<th>Description</th>
+							<th>Created By</th>
+							<th>Last Modified By</th>
+							<th>Creation Date</th>
+							<th>Last Modified date</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -44,6 +48,10 @@
 									</td>
 								<td>${todo.title}</td>
 								<td>${todo.description}</td>
+								<td>${todo.createdBy}</td>
+								<td>${todo.lastModifiedBy}</td>
+								<td>${todo.createdDate}</td>
+								<td>${todo.lastModifiedDate}</td>
 								<td style='white-space: nowrap'><a
 									href='<spring:url value="/todo/update/${todo.id}"></spring:url>'
 									class="btn btn-primary btn-xs"><spring:message

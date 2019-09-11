@@ -9,6 +9,10 @@
 		http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
+	<bean id="customAuditorAware" class="com.spring.mvc.test.jpa.auditing.CustomAuditorAware"/>
+	
+	<jpa:auditing auditor-aware-ref="customAuditorAware"/>
+	
 	<context:property-placeholder
 		location="classpath:application.properties"
 		ignore-resource-not-found="false" />
