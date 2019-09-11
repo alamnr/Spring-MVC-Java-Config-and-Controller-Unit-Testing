@@ -27,6 +27,7 @@ public class CustomUserDetailService implements UserDetailsService {
 		return new User(user.getUserName(),user.getPassword(), 
 				AuthorityUtils.commaSeparatedStringToAuthorityList(
 						user.getRoles().stream().map(obj->obj.getRoleName()).collect(Collectors.joining(","))));
+		//return user;
 	}
 
 }

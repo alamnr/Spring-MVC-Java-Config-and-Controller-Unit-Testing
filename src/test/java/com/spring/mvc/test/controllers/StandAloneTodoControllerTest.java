@@ -124,12 +124,12 @@ public class StandAloneTodoControllerTest {
 	@Test
 	public void showAddTodoForm_ShouldCreateFormObjectAndRenderAddTodoForm() throws Exception {
 		mockMvc.perform(get("/todo/add")).andExpect(status().isOk())
-				.andExpect(view().name(TodoController.VIEW_TODO_ADD))
+				.andExpect(view().name(TodoController.VIEW_ADD))
 				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_add.jsp"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id", nullValue())))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("id", nullValue())))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,
 						hasProperty("description", isEmptyOrNullString())))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,
 						hasProperty("title", isEmptyOrNullString())));
 
 		verifyZeroInteractions(todoServiceMock);
@@ -139,13 +139,13 @@ public class StandAloneTodoControllerTest {
 	public void add_EmptyTodoEntry_ShouldRenderFormViewAndReturnValidationErrorForTitle() throws Exception {
 
 		mockMvc.perform(post("/todo/add").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO())).andExpect(status().isOk())
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO())).andExpect(status().isOk())
 				.andExpect(view().name("todo/todo_add")).andExpect(forwardedUrl("/WEB-INF/views/todo/todo_add.jsp"))
-				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "title"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id", nullValue())))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE, "title"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("id", nullValue())))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,
 						hasProperty("title", isEmptyOrNullString())))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,
 						hasProperty("description", isEmptyOrNullString())));
 		verifyZeroInteractions(todoServiceMock);
 	}
@@ -157,15 +157,15 @@ public class StandAloneTodoControllerTest {
 		String description = TestUtil.createStringWithLength(Todo.MAX_LENGTH_DESCRIPTION + 1);
 
 		mockMvc.perform(post("/todo/add").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO())
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO())
 				.param(WebTestConstants.FORM_FIELD_TITLE, title)
 				.param(WebTestConstants.FORM_FIELD_DESCRIPTION, description)).andExpect(status().isOk())
 				.andExpect(view().name("todo/todo_add")).andExpect(forwardedUrl("/WEB-INF/views/todo/todo_add.jsp"))
-				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "title"))
-				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "description"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id", nullValue())))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title", is(title))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE, "title"))
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE, "description"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("id", nullValue())))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("title", is(title))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,
 						hasProperty("description", is(description))));
 
 		verifyZeroInteractions(todoServiceMock);
@@ -180,16 +180,16 @@ public class StandAloneTodoControllerTest {
 
 		when(todoServiceMock.addTodo(isA(TodoDTO.class))).thenReturn(added);
 
-		String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_TODO_VIEW);
+		String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_VIEW);
 
 		mockMvc.perform(post("/todo/add").contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param(WebTestConstants.FORM_FIELD_DESCRIPTION, "description")
 				.param(WebTestConstants.FORM_FIELD_TITLE, "title")
-				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO()))
 
 				.andExpect(status().isMovedTemporarily()).andExpect(view().name(expectedRedirectViewPath))
 				.andExpect(redirectedUrl("/todo/1"))
-				.andExpect(model().attribute(TodoController.PARAMETER_TODO_ID, is(ID.toString()))).andExpect(flash()
+				.andExpect(model().attribute(TodoController.PARAMETER_ID, is(ID.toString()))).andExpect(flash()
 						.attribute(TodoController.FLASH_MESSAGE_KEY_FEEDBACK, is("Todo entry: title was added.")));
 
 		ArgumentCaptor<TodoDTO> formObjectArgument = ArgumentCaptor.forClass(TodoDTO.class);
@@ -211,7 +211,7 @@ public class StandAloneTodoControllerTest {
 
 		when(todoServiceMock.deleteById(ID)).thenReturn(deleted);
 
-		String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_TODO_LIST);
+		String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_LIST);
 
 		mockMvc.perform(get("/todo/delete/{id}", ID)).andExpect(status().isMovedTemporarily())
 				.andExpect(view().name(expectedRedirectViewPath)).andExpect(flash()
@@ -244,13 +244,13 @@ public class StandAloneTodoControllerTest {
 
 		when(todoServiceMock.findAll()).thenReturn(Arrays.asList(first, second));
 
-		mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name(TodoController.VIEW_TODO_LIST))
+		mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name(TodoController.VIEW_LIST))
 				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_list.jsp"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST, hasSize(2)))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST,
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_LIST, hasSize(2)))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_LIST,
 						hasItem(allOf(hasProperty("id", is(1L)), hasProperty("description", is("Lorem Ipsum")),
 								hasProperty("title", is("Foo"))))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO_LIST,
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_LIST,
 						hasItem(allOf(hasProperty("id", is(2L)), hasProperty("description", is("Lorem Ipsum")),
 								hasProperty("title", is("Bar"))))));
 		
@@ -269,11 +269,11 @@ public class StandAloneTodoControllerTest {
 		
 		mockMvc.perform(get("/todo/{id}",ID))
 				.andExpect(status().isOk())
-				.andExpect(view().name(TodoController.VIEW_TODO_VIEW))
+				.andExpect(view().name(TodoController.VIEW_DETAIL))
 				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_details.jsp"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id",is(1L))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,hasProperty("description", is("Lorem Ipsum"))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",is("Foo"))));
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("id",is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,hasProperty("description", is("Lorem Ipsum"))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("title",is("Foo"))));
 				
 		
 		verify(todoServiceMock, times(1)).findById(ID);
@@ -306,11 +306,11 @@ public class StandAloneTodoControllerTest {
 		
 		mockMvc.perform(get("/todo/update/{id}",ID))
 				.andExpect(status().isOk())
-				.andExpect(view().name(TodoController.VIEW_TODO_UPDATE))
+				.andExpect(view().name(TodoController.VIEW_UPDATE))
 				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_update.jsp"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO,hasProperty("id",is(1L))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("description",is("Lorem Ipsum"))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",is("Foo"))));
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE,hasProperty("id",is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("description",is("Lorem Ipsum"))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("title",is("Foo"))));
 		
 		verify(todoServiceMock,times(1)).findById(ID);
 		verifyNoMoreInteractions(todoServiceMock);
@@ -337,14 +337,14 @@ public class StandAloneTodoControllerTest {
 		mockMvc.perform(post("/todo/update")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param(WebTestConstants.FORM_FIELD_ID, ID.toString())
-				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))  
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO()))  
 				.andExpect(status().isOk())
-				.andExpect(view().name(TodoController.VIEW_TODO_UPDATE))
+				.andExpect(view().name(TodoController.VIEW_UPDATE))
 				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_update.jsp"))
-				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "title"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id", is(1L))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("description",isEmptyOrNullString())))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",isEmptyOrNullString())));
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE, "title"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("id", is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("description",isEmptyOrNullString())))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("title",isEmptyOrNullString())));
 		
 		verifyZeroInteractions(todoServiceMock);
 		
@@ -361,15 +361,15 @@ public class StandAloneTodoControllerTest {
 				.param(WebTestConstants.FORM_FIELD_DESCRIPTION, description)
 				.param(WebTestConstants.FORM_FIELD_TITLE, title)
 				.param(WebTestConstants.FORM_FIELD_ID, ID.toString())
-				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO()))
 				.andExpect(status().isOk())
-				.andExpect(view().name(TodoController.VIEW_TODO_UPDATE))
+				.andExpect(view().name(TodoController.VIEW_UPDATE))
 				.andExpect(forwardedUrl("/WEB-INF/views/todo/todo_update.jsp"))
-				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "title"))
-				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE_TODO, "description"))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("id",is(1L))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("description",is(description))))
-				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE_TODO, hasProperty("title",is(title))));
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE, "title"))
+				.andExpect(model().attributeHasFieldErrors(TodoController.MODEL_ATTRIBUTE, "description"))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("id",is(1L))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("description",is(description))))
+				.andExpect(model().attribute(TodoController.MODEL_ATTRIBUTE, hasProperty("title",is(title))));
 		
 		verifyZeroInteractions(todoServiceMock);
 			
@@ -383,7 +383,7 @@ public class StandAloneTodoControllerTest {
 		
 		when(todoServiceMock.update(isA(TodoDTO.class))).thenReturn(updated);
 		
-		 String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_TODO_VIEW);
+		 String expectedRedirectViewPath = TestUtil.createRedirectViewPath(TodoController.REQUEST_MAPPING_VIEW);
 
 		
 		mockMvc.perform(post("/todo/update")
@@ -391,10 +391,10 @@ public class StandAloneTodoControllerTest {
 				.param(WebTestConstants.FORM_FIELD_ID, ID.toString())
 				.param(WebTestConstants.FORM_FIELD_TITLE, TITLE)
 				.param(WebTestConstants.FORM_FIELD_DESCRIPTION, DESCRIPTION)
-				.sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO()))
+				.sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO()))
 				.andExpect(status().isMovedTemporarily())
 				.andExpect(view().name(expectedRedirectViewPath))
-				.andExpect(model().attribute(TodoController.PARAMETER_TODO_ID, is("1")))
+				.andExpect(model().attribute(TodoController.PARAMETER_ID, is("1")))
 				.andExpect(flash().attribute(TodoController.FLASH_MESSAGE_KEY_FEEDBACK, is("Todo entry: Foo was updated.")));
 		
 
@@ -419,7 +419,7 @@ public class StandAloneTodoControllerTest {
 	                .param(WebTestConstants.FORM_FIELD_DESCRIPTION, DESCRIPTION)
 	                .param(WebTestConstants.FORM_FIELD_ID, ID.toString())
 	                .param(WebTestConstants.FORM_FIELD_TITLE, TITLE)
-	                .sessionAttr(TodoController.MODEL_ATTRIBUTE_TODO, new TodoDTO())
+	                .sessionAttr(TodoController.MODEL_ATTRIBUTE, new TodoDTO())
 	        )
 	                .andExpect(status().isNotFound())
 	                .andExpect(view().name(ErrorController.VIEW_NOT_FOUND))

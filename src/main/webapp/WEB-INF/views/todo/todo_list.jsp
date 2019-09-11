@@ -16,13 +16,13 @@
 	<div>
 		<a href='<spring:url value="/todo/add"></spring:url>'
 			class="btn btn-primary"><spring:message
-				code="label.add.todo.link" /></a>
+				code="label.add.link" /></a>
 	</div>
 	<div id="todo-list" class="well page-content">
 		<c:choose>
 			<c:when test="${empty todos}">
 				<p>
-					<spring:message code="label.todo.list.empty" />
+					<spring:message code="label.list.empty" />
 				</p>
 			</c:when>
 			<c:otherwise>
@@ -55,9 +55,9 @@
 								<td style='white-space: nowrap'><a
 									href='<spring:url value="/todo/update/${todo.id}"></spring:url>'
 									class="btn btn-primary btn-xs"><spring:message
-											code="label.update.todo.link" /></a> <a id="delete-todo-link" 
+											code="label.update.link" /></a> <a id="delete-todo-link" 
 									class="btn btn-primary btn-xs" onclick="openDialog(${todo.id})"><spring:message
-											code="label.delete.todo.link" /></a></td>
+											code="label.delete.link" /></a></td>
 							</tr>
 						</c:forEach>
 
@@ -71,14 +71,14 @@
         <div id="delete-todo-confirmation-dialog" class="modal">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
-                <h3><spring:message code="label.todo.delete.dialog.title"/></h3>
+                <h3><spring:message code="label.delete.dialog.title"/></h3>
             </div>
             <div class="modal-body">
-                <p><spring:message code="label.todo.delete.dialog.message"/></p>
+                <p><spring:message code="label.delete.dialog.message"/></p>
             </div>
             <div class="modal-footer">
                 <a id="cancel-todo-button" href="#" class="btn"><spring:message code="label.cancel"/></a>
-                <a id="delete-todo-button" href="#" class="btn btn-primary"><spring:message code="label.delete.todo.button"/></a>
+                <a id="delete-todo-button" href="#" class="btn btn-primary"><spring:message code="label.delete.link"/></a>
             </div>
         </div>
     </script>

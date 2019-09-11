@@ -25,13 +25,13 @@
 			
 		<security:logout logout-url="/logout" logout-success-url="/login?logout=true"/> 
 			
-			<security:access-denied-handler
-			ref="customAccessDeniedHandler" />
+		<security:access-denied-handler ref="customAccessDeniedHandler" />
 		
 		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
 		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_FOO')"/>
+		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/>
 		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/**" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
+		<security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
 		
 	</security:http>
 	

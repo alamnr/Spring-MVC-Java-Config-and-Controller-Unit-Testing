@@ -7,6 +7,11 @@
 	<bean id="todoService" class="com.spring.mvc.test.service.TodoService" >
 		<constructor-arg name="todoRepository" ref="todoRepository"/>
 	</bean>
+	
+	<bean id="userService" class="com.spring.mvc.test.service.UserService" >
+		<constructor-arg name="appUserRepository" ref="appUserRepository"/>
+		<constructor-arg name="roleRepository" ref="roleRepository"/>
+	</bean>
 
 	<!-- Internationalization -->
 

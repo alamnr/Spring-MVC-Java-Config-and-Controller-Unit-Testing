@@ -24,57 +24,58 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.mvc.test.dto.TodoDTO;
+import com.spring.mvc.test.dto.UserDTO;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
-
+import com.spring.mvc.test.service.UserService;
 import com.spring.mvc.test.exception.TodoNotFoundException;
 
 @Controller
-@SessionAttributes("todo")
-public class TodoController {
+@SessionAttributes("user")
+public class UserController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TodoController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	protected static final String FEEDBACK_MESSAGE_KEY_ADDED = "feedback.message.added";
 	protected static final String FEEDBACK_MESSAGE_KEY_UPDATED = "feedback.message.updated";
 	protected static final String FEEDBACK_MESSAGE_KEY_DELETED = "feedback.message.deleted";
 	protected static final String FLASH_MESSAGE_KEY_FEEDBACK = "feedbackMessage";
 
-	protected static final String MODEL_ATTRIBUTE = "todo";
-	protected static final String MODEL_ATTRIBUTE_LIST = "todos";
+	protected static final String MODEL_ATTRIBUTE = "user";
+	protected static final String MODEL_ATTRIBUTE_LIST = "users";
 
 	protected static final String PARAMETER_ID = "id";
 
-	protected static final String REQUEST_MAPPING_LIST = "/todos";
-	protected static final String REQUEST_MAPPING_VIEW = "/todo/{id}";
+	protected static final String REQUEST_MAPPING_LIST = "/users";
+	protected static final String REQUEST_MAPPING_VIEW = "/user/{id}";
 
-	protected static final String VIEW_ADD = "todo/todo_add";
-	protected static final String VIEW_LIST = "todo/todo_list";
-	protected static final String VIEW_UPDATE = "todo/todo_update";
-	protected static final String VIEW_DETAIL = "todo/todo_details";
+	protected static final String VIEW_ADD = "user/user_add";
+	protected static final String VIEW_LIST = "user/user_list";
+	protected static final String VIEW_UPDATE = "user/user_update";
+	protected static final String VIEW_DETAIL = "user/user_details";
 
-	private final TodoService service;
+	private final UserService service;
 
 	private final MessageSource messageSource;
 
 	@Autowired
-	public TodoController(TodoService service, MessageSource messageSource) {
+	public UserController(UserService service, MessageSource messageSource) {
 		super();
 		this.service = service;
 		this.messageSource = messageSource;
 	}
 
 	
-	@RequestMapping(value = "/todo/add", method = RequestMethod.GET)
-	public String showAddTodoForm(Model model) {
-		LOGGER.debug("Rendering add to-do entry form.");
-		TodoDTO formObject = new TodoDTO();
+	@RequestMapping(value = "/user/add", method = RequestMethod.GET)
+	public String showAddUserForm(Model model) {
+		LOGGER.debug("Rendering add user entry form.");
+		UserDTO formObject = new UserDTO();
         model.addAttribute(MODEL_ATTRIBUTE, formObject);
 
-		return "todo/todo_add";
+		return "user/user_add";
 	}
 
-	@RequestMapping(value = "/todo/add", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/todo/add", method = RequestMethod.POST)
 	public String saveTodo(@ModelAttribute("todo") @Valid TodoDTO todoDTO, Errors errors, SessionStatus sessionStatus,
 			Model model, RedirectAttributes attributes) {
 		LOGGER.debug("Adding a new to-do entry with information: {}", todoDTO);
@@ -188,6 +189,6 @@ public class TodoController {
 		redirectViewPath.append("redirect:");
 		redirectViewPath.append(requestMapping);
 		return redirectViewPath.toString();
-	}
+	}*/
 
 }
