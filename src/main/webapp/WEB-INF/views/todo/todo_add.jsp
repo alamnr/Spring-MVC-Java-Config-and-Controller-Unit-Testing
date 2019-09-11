@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="action-buttons">
-                <a href='<spring:url value="/"></spring:url>' class="btn"><spring:message code="label.cancel"/></a>
+                <a href='<spring:url value="/todos"></spring:url>' class="btn"><spring:message code="label.cancel"/></a>
                 <button id="add-todo-button" type="submit" class="btn btn-primary"><spring:message
                         code="label.add.todo.button"/></button>
             </div>

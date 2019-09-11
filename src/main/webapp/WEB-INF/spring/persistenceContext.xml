@@ -15,6 +15,8 @@
 
 	<context:component-scan
 		base-package="com.spring.mvc.test.model" />
+	<context:component-scan
+		base-package="com.spring.mvc.test.security.model" />
 	<jpa:repositories
 		base-package="com.spring.mvc.test.repository" />
 
@@ -35,8 +37,14 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter"
 			ref="hibernateJpaVendorAdapter" />
-		<property name="packagesToScan"
-			value="com.spring.mvc.test.model" />
+		<!-- <property name="packagesToScan"
+			value="com.spring.mvc.test.model" /> -->
+		<property name="packagesToScan">
+			<array>
+              <value>com.spring.mvc.test.model</value>
+              <value>com.spring.mvc.test.security.model</value>
+         </array>
+		</property>
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
@@ -44,7 +52,7 @@
 				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-				<!-- <prop key="hibernate.hbm2ddl.import_files">init.sql</prop> -->
+				<prop key="hibernate.hbm2ddl.import_files">classpath:/dbScript.sql</prop> 
 			</props>
 		</property>
 	</bean>
