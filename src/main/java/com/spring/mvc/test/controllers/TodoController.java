@@ -26,8 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.mvc.test.dto.TodoDTO;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
-
-import com.spring.mvc.test.exception.TodoNotFoundException;
+import com.spring.mvc.test.exception.EntityNotFoundException;
 
 @Controller
 @SessionAttributes("todo")
@@ -95,7 +94,7 @@ public class TodoController {
 	
 
     @RequestMapping(value = "/todo/delete/{id}", method = RequestMethod.GET)
-    public String deleteById(@PathVariable("id") Long id, RedirectAttributes attributes) throws TodoNotFoundException {
+    public String deleteById(@PathVariable("id") Long id, RedirectAttributes attributes) throws EntityNotFoundException {
         LOGGER.debug("Deleting a to-do entry with id: {}", id);
 
         Todo deleted = service.deleteById(id);
@@ -118,7 +117,7 @@ public class TodoController {
 	}
 
 	@RequestMapping(value = REQUEST_MAPPING_VIEW, method=RequestMethod.GET)
-	public String findById(@PathVariable("id") Long todoId, Model model) throws TodoNotFoundException {
+	public String findById(@PathVariable("id") Long todoId, Model model) throws EntityNotFoundException {
 		LOGGER.debug("Rendering to-do page for to-do entry with id: {}", todoId);
 
         Todo found = service.findById(todoId);
@@ -130,7 +129,7 @@ public class TodoController {
 	}
 
 	@RequestMapping(value = "/todo/update/{id}", method = RequestMethod.GET)
-    public String showUpdateTodoForm(@PathVariable("id") Long id, Model model) throws TodoNotFoundException {
+    public String showUpdateTodoForm(@PathVariable("id") Long id, Model model) throws EntityNotFoundException {
         LOGGER.debug("Rendering update to-do entry form for to-do entry with id: {}", id);
 
         Todo updated = service.findById(id);
@@ -143,7 +142,7 @@ public class TodoController {
     }
 	
 	 @RequestMapping(value = "/todo/update", method = RequestMethod.POST)
-	    public String update(@Valid @ModelAttribute(MODEL_ATTRIBUTE) TodoDTO dto, BindingResult result, RedirectAttributes attributes) throws TodoNotFoundException {
+	    public String update(@Valid @ModelAttribute(MODEL_ATTRIBUTE) TodoDTO dto, BindingResult result, RedirectAttributes attributes) throws EntityNotFoundException {
 	        LOGGER.debug("Updating a to-do entry with information: {}", dto);
 
 	        if (result.hasErrors()) {

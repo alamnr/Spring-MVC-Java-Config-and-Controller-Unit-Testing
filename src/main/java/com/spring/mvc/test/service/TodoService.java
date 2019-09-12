@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.mvc.test.dto.TodoDTO;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.repository.TodoRepository;
-import com.spring.mvc.test.exception.TodoNotFoundException;
+import com.spring.mvc.test.exception.EntityNotFoundException;
 
 
 @Service
@@ -42,14 +42,14 @@ public class TodoService {
 		
 	}
 	
-	public Todo findById(Long id) throws TodoNotFoundException {
+	public Todo findById(Long id) throws EntityNotFoundException {
 				
 		Todo found = todoRepository.getOne(id);
 		
 		LOGGER.debug("find todo by id: {}", found);
 		
 		if (found == null) {
-            throw new TodoNotFoundException("No to-entry found with id: " + id);
+            throw new EntityNotFoundException("No to-entry found with id: " + id);
         }
 		
 		return  found;		
@@ -66,7 +66,7 @@ public class TodoService {
 		
 	}
 
-	public Todo deleteById(Long id) throws TodoNotFoundException {
+	public Todo deleteById(Long id) throws EntityNotFoundException {
 		LOGGER.debug("Deleting a to-do entry with id: {}", id);
 
         Optional<Todo> deleted = todoRepository.findById(id);
@@ -75,7 +75,7 @@ public class TodoService {
         return deleted.get();
 	}
 
-	public Todo update(TodoDTO updated) throws TodoNotFoundException {
+	public Todo update(TodoDTO updated) throws EntityNotFoundException {
 		LOGGER.debug("Updating contact with information: {}", updated);
 
         Optional<Todo> model = todoRepository.findById(updated.getId());

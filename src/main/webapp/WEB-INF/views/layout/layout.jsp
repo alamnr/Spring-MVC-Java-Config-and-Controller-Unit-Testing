@@ -2,7 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <html>
 <head>
 <title><spring:message code="spring.test.mvc.example.title" /></title>
@@ -41,30 +42,40 @@
 						<ul class="nav">
 							<li><a href='<spring:url value="/"></spring:url>'><spring:message
 										code="label.navigation.homepage.link" /></a></li>
-							<li><a href='<spring:url value="/todos"></spring:url>'><spring:message
-										code="label.todo.view.page.title" /></a></li>
-										
-							<sec:authorize  access="authenticated" var="authenticated"/>
-								
-								<c:choose>
-									<c:when test="${authenticated}">
-										<li>
-											<p class="navbar-text">
-												Welcome! <sec:authentication property="name"/>
-												<a id="logoutLink" href="#">Logout</a>
-											</p>
-										</li>
-										
-										<form id="logoutForm" action='<c:url value="/logout"/>' method="post">
-											<sec:csrfInput/>
-										</form>
-									</c:when>
-									<c:otherwise>
-									  <li><a href='<spring:url value="/login"/>'>Sign in</a></li>
-									  <li><a href='<spring:url value="/register"/>'><spring:message code="user.register.title" /></a></li>
-									</c:otherwise>
-								</c:choose>
-							
+							<sec:authorize url="/todos">
+								<li><a href='<spring:url value="/todos"></spring:url>'><spring:message
+											code="label.todo.view.page.title" /></a></li>
+							</sec:authorize>
+
+							<sec:authorize url="/users">
+								<li><a href='<spring:url value="/users"></spring:url>'><spring:message
+											code="label.user.view.page.title" /></a></li>
+							</sec:authorize>
+
+							<sec:authorize access="authenticated" var="authenticated" />
+
+							<c:choose>
+								<c:when test="${authenticated}">
+									<li>
+										<p class="navbar-text">
+											Welcome!
+											<sec:authentication property="name" />
+											<a id="logoutLink" href="#">Logout</a>
+										</p>
+									</li>
+
+									<form id="logoutForm" action='<c:url value="/logout"/>'
+										method="post">
+										<sec:csrfInput />
+									</form>
+								</c:when>
+								<c:otherwise>
+									<li><a href='<spring:url value="/login"/>'>Sign in</a></li>
+									<li><a href='<spring:url value="/register"/>'><spring:message
+												code="user.register.title" /></a></li>
+								</c:otherwise>
+							</c:choose>
+
 						</ul>
 
 
@@ -104,7 +115,7 @@
             {{message}}
         </div>
     </script>
-    <script type="text/javascript">
+	<script type="text/javascript">
     	$(document).ready(()=>{
     		$("#logoutLink").click((e)=>{
     			e.preventDefault();

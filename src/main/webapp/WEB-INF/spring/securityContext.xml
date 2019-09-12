@@ -28,8 +28,11 @@
 		<security:access-denied-handler ref="customAccessDeniedHandler" />
 		
 		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
+		<security:intercept-url pattern="/users" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
 		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_FOO')"/>
+		<security:intercept-url pattern="/user/add" access="hasRole('ROLE_FOO')"/>
 		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/>
+		<security:intercept-url pattern="/user/delete/*" access="hasRole('ROLE_FOO')"/>
 		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/>
 		<security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
 		

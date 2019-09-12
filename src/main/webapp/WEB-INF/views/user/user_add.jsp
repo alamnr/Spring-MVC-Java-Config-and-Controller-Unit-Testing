@@ -14,62 +14,63 @@
 	<h1>
 		<spring:message code="label.user.add.page.title" />
 	</h1>
-	<spring:url value="/user/add" var="urlValue"></spring:url>
-	<form:form action="${urlValue}" method="post" modelAttribute="user">
-		<div class="control-group">
-			<label for="userName"><spring:message
-					code="label.user.username" />:</label>
+	<div class="well page-content">
+		<spring:url value="/user/add" var="urlValue"></spring:url>
+		<form:form action="${urlValue}" method="post" modelAttribute="user">
+			<div class="control-group">
+				<label for="userName"><spring:message
+						code="label.user.username" />:</label>
 
-			<div class="controls">
-				<form:input id="userName" path="userName" />
-				<form:errors path="userName" cssClass="help-inline" />
+				<div class="controls">
+					<form:input id="userName" path="userName" />
+					<form:errors path="userName" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
-			<label for="userPassword"><spring:message
-					code="label.user.password" />:</label>
+			<div class="control-group">
+				<label for="userPassword"><spring:message
+						code="label.user.password" />:</label>
 
-			<div class="controls">
-				<form:password id="userPassword" path="password" />
-				<form:errors path="password" cssClass="help-inline" />
+				<div class="controls">
+					<form:password id="userPassword" path="password" />
+					<form:errors path="password" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
-			<label for="userEmail"><spring:message
-					code="label.user.email" />:</label>
+			<div class="control-group">
+				<label for="userEmail"><spring:message
+						code="label.user.email" />:</label>
 
-			<div class="controls">
-				<form:input id="userEmail" path="email" />
-				<form:errors path="email" cssClass="help-inline" />
+				<div class="controls">
+					<form:input id="userEmail" path="email" />
+					<form:errors path="email" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
-			<label for="userFirstName"><spring:message
-					code="label.user.firstName" />:</label>
+			<div class="control-group">
+				<label for="userFirstName"><spring:message
+						code="label.user.firstName" />:</label>
 
-			<div class="controls">
-				<form:input id="userFirstName" path="firstName" />
-				<form:errors path="firstName" cssClass="help-inline" />
+				<div class="controls">
+					<form:input id="userFirstName" path="firstName" />
+					<form:errors path="firstName" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
-			<label for="userLastName"><spring:message
-					code="label.user.lastName" />:</label>
+			<div class="control-group">
+				<label for="userLastName"><spring:message
+						code="label.user.lastName" />:</label>
 
-			<div class="controls">
-				<form:input id="userLastName" path="lastName" />
-				<form:errors path="lastName" cssClass="help-inline" />
+				<div class="controls">
+					<form:input id="userLastName" path="lastName" />
+					<form:errors path="lastName" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="action-buttons">
-			<a href='<spring:url value="/users"></spring:url>' class="btn"><spring:message
-					code="label.cancel" /></a>
-			<button type="submit" class="btn btn-primary">
-				<spring:message code="label.add.link" />
-			</button>
-		</div>
+			<div class="action-buttons">
+				<a href='<spring:url value="/users"></spring:url>' class="btn"><spring:message
+						code="label.cancel" /></a>
+				<button type="submit" class="btn btn-primary">
+					<spring:message code="label.add.link" />
+				</button>
+			</div>
 
-	</form:form>
-
+		</form:form>
+	</div>
 </body>
 </html>

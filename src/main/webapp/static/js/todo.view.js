@@ -19,6 +19,8 @@ $(function() {
 
     $("#view-holder").on("click", "#delete-todo-button", function(e) {
         e.preventDefault();
+        console.log('todo id-'+$("#todo-id").text());
+        console.log('user id-'+$("#user-id").text());
         window.location.href = ctx+"/todo/delete/" + $("#todo-id").text();        
     });
 });

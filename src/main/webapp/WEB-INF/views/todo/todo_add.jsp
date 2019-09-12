@@ -14,35 +14,36 @@
 	<h1>
 		<spring:message code="label.todo.add.page.title" />
 	</h1>
-	<spring:url value="/todo/add" var="urlValue"></spring:url>
-	<form:form action="${urlValue}" method="post" modelAttribute="todo">
-		<div class="control-group">
-			<label for="todo-title"><spring:message
-					code="label.todo.title" />:</label>
+	<div class="well page-content">
+		<spring:url value="/todo/add" var="urlValue"></spring:url>
+		<form:form action="${urlValue}" method="post" modelAttribute="todo">
+			<div class="control-group">
+				<label for="todo-title"><spring:message
+						code="label.todo.title" />:</label>
 
-			<div class="controls">
-				<form:input id="todo-title" path="title" />
-				<form:errors path="title" cssClass="help-inline" />
+				<div class="controls">
+					<form:input id="todo-title" path="title" />
+					<form:errors path="title" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="control-group">
-			<label for="todo-description"><spring:message
-					code="label.todo.description" />:</label>
+			<div class="control-group">
+				<label for="todo-description"><spring:message
+						code="label.todo.description" />:</label>
 
-			<div class="controls">
-				<form:textarea id="todo-description" path="description" />
-				<form:errors path="description" cssClass="help-inline" />
+				<div class="controls">
+					<form:textarea id="todo-description" path="description" />
+					<form:errors path="description" cssClass="help-inline" />
+				</div>
 			</div>
-		</div>
-		<div class="action-buttons">
-			<a href='<spring:url value="/todos"></spring:url>' class="btn"><spring:message
-					code="label.cancel" /></a>
-			<button type="submit" class="btn btn-primary">
-				<spring:message code="label.add.link" />
-			</button>
-		</div>
+			<div class="action-buttons">
+				<a href='<spring:url value="/todos"></spring:url>' class="btn"><spring:message
+						code="label.cancel" /></a>
+				<button type="submit" class="btn btn-primary">
+					<spring:message code="label.add.link" />
+				</button>
+			</div>
 
-	</form:form>
-
+		</form:form>
+	</div>
 </body>
 </html>

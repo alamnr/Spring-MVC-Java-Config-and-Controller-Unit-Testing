@@ -26,9 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.mvc.test.dto.TodoDTO;
 import com.spring.mvc.test.dto.UserDTO;
 import com.spring.mvc.test.model.Todo;
+import com.spring.mvc.test.security.model.AppUser;
 import com.spring.mvc.test.service.TodoService;
 import com.spring.mvc.test.service.UserService;
-import com.spring.mvc.test.exception.TodoNotFoundException;
+import com.spring.mvc.test.exception.EntityNotFoundException;
 
 @Controller
 @SessionAttributes("user")
@@ -75,19 +76,19 @@ public class UserController {
 		return "user/user_add";
 	}
 
-	/*@RequestMapping(value = "/todo/add", method = RequestMethod.POST)
-	public String saveTodo(@ModelAttribute("todo") @Valid TodoDTO todoDTO, Errors errors, SessionStatus sessionStatus,
+	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
+	public String saveTodo(@ModelAttribute("user") @Valid UserDTO userDTO, Errors errors, SessionStatus sessionStatus,
 			Model model, RedirectAttributes attributes) {
-		LOGGER.debug("Adding a new to-do entry with information: {}", todoDTO);
+		LOGGER.debug("Adding a new User entry with information: {}", userDTO);
 		if (errors.hasErrors()) {
-			LOGGER.debug("Add to-do form was submitted with binding errors. Rendering form view.");
-			return "todo/todo_add";
+			LOGGER.debug("Add user form was submitted with binding errors. Rendering form view.");
+			return "user/user_add";
 		}
 
-		Todo added = this.service.addTodo(todoDTO);
-		System.out.println("Saving todo");
+		AppUser added = this.service.addUser(userDTO);
+		//System.out.println("Saving user");
 		sessionStatus.setComplete();
-		addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_ADDED, added.getTitle());
+		addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_ADDED, added.getUserName());
 		attributes.addAttribute(PARAMETER_ID, added.getId());
 
 		return createRedirectViewPath(REQUEST_MAPPING_VIEW);
@@ -95,34 +96,34 @@ public class UserController {
 	}
 	
 
-    @RequestMapping(value = "/todo/delete/{id}", method = RequestMethod.GET)
-    public String deleteById(@PathVariable("id") Long id, RedirectAttributes attributes) throws TodoNotFoundException {
-        LOGGER.debug("Deleting a to-do entry with id: {}", id);
+    @RequestMapping(value = "/user/delete/{id}", method = RequestMethod.GET)
+    public String deleteById(@PathVariable("id") Long id, RedirectAttributes attributes) throws EntityNotFoundException {
+        LOGGER.debug("Deleting a user entry with id: {}", id);
 
-        Todo deleted = service.deleteById(id);
-        LOGGER.debug("Deleted to-do entry with information: {}", deleted);
+        AppUser deleted = service.deleteById(id);
+        LOGGER.debug("Deleted user entry with information: {}", deleted);
 
-        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_DELETED, deleted.getTitle());
+        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_DELETED, deleted.getUserName());
 
         return createRedirectViewPath(REQUEST_MAPPING_LIST);
     }
     
     @RequestMapping(value = REQUEST_MAPPING_LIST, method = RequestMethod.GET)
-	public String findAllTodo(Model model) {
-		LOGGER.debug("Rendering to-do list.");
-		List<Todo> models = service.findAll();
-        LOGGER.debug("Found {} to-do entries.", models.size());
+	public String findAllUser(Model model) {
+		LOGGER.debug("Rendering user list.");
+		List<AppUser> models = service.findAll();
+        LOGGER.debug("Found {} user entries.", models.size());
 
-		model.addAttribute(TodoController.MODEL_ATTRIBUTE_LIST, models);
+		model.addAttribute(MODEL_ATTRIBUTE_LIST, models);
 		
 		return VIEW_LIST;
 	}
 
 	@RequestMapping(value = REQUEST_MAPPING_VIEW, method=RequestMethod.GET)
-	public String findById(@PathVariable("id") Long todoId, Model model) throws TodoNotFoundException {
-		LOGGER.debug("Rendering to-do page for to-do entry with id: {}", todoId);
+	public String findById(@PathVariable("id") Long userId, Model model) throws EntityNotFoundException {
+		LOGGER.debug("Rendering user page for user entry with id: {}", userId);
 
-        Todo found = service.findById(todoId);
+        AppUser found = service.findById(userId);
         LOGGER.debug("Found to-do entry with information: {}", found);
 
         model.addAttribute(MODEL_ATTRIBUTE, found);
@@ -130,43 +131,46 @@ public class UserController {
 		return VIEW_DETAIL;
 	}
 
-	@RequestMapping(value = "/todo/update/{id}", method = RequestMethod.GET)
-    public String showUpdateTodoForm(@PathVariable("id") Long id, Model model) throws TodoNotFoundException {
-        LOGGER.debug("Rendering update to-do entry form for to-do entry with id: {}", id);
+	@RequestMapping(value = "/user/update/{id}", method = RequestMethod.GET)
+    public String showUpdateUserForm(@PathVariable("id") Long id, Model model) throws EntityNotFoundException {
+        LOGGER.debug("Rendering update user entry form for user entry with id: {}", id);
 
-        Todo updated = service.findById(id);
-        LOGGER.debug("Rendering update to-do form for to-do with information: {}", updated);
+        AppUser updated = service.findById(id);
+        LOGGER.debug("Rendering update user form for user with information: {}", updated);
 
-        TodoDTO formObject = constructFormObjectForUpdateForm(updated);
+        UserDTO formObject = constructFormObjectForUpdateForm(updated);
         model.addAttribute(MODEL_ATTRIBUTE, formObject);
 
         return VIEW_UPDATE;
     }
 	
-	 @RequestMapping(value = "/todo/update", method = RequestMethod.POST)
-	    public String update(@Valid @ModelAttribute(MODEL_ATTRIBUTE) TodoDTO dto, BindingResult result, RedirectAttributes attributes) throws TodoNotFoundException {
-	        LOGGER.debug("Updating a to-do entry with information: {}", dto);
+	 @RequestMapping(value = "/user/update", method = RequestMethod.POST)
+	    public String update(@Valid @ModelAttribute(MODEL_ATTRIBUTE) UserDTO dto, BindingResult result, RedirectAttributes attributes) throws EntityNotFoundException {
+	        LOGGER.debug("Updating a user entry with information: {}", dto);
 
 	        if (result.hasErrors()) {
-	            LOGGER.debug("Update to-do entry form was submitted with validation errors. Rendering form view.");
+	            LOGGER.debug("Update user entry form was submitted with validation errors. Rendering form view.");
 	            return VIEW_UPDATE;
 	        }
 
-	        Todo updated = service.update(dto);
-	        LOGGER.debug("Updated the information of a to-entry to: {}", updated);
+	        AppUser updated = service.update(dto);
+	        LOGGER.debug("Updated the information of a entry to: {}", updated);
 
-	        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_UPDATED, updated.getTitle());
+	        addFeedbackMessage(attributes, FEEDBACK_MESSAGE_KEY_UPDATED, updated.getUserName());
 	        attributes.addAttribute(PARAMETER_ID, updated.getId());
 
 	        return createRedirectViewPath(REQUEST_MAPPING_VIEW);
 	    }
 
-	private TodoDTO constructFormObjectForUpdateForm(Todo updated) {
-		TodoDTO dto = new TodoDTO();
+	private UserDTO constructFormObjectForUpdateForm(AppUser updated) {
+		UserDTO dto = new UserDTO();
 
 		dto.setId(updated.getId());
-		dto.setDescription(updated.getDescription());
-		dto.setTitle(updated.getTitle());
+		dto.setEmail(updated.getEmail());
+		dto.setFirstName(updated.getFirstName());
+		dto.setLastName(updated.getLastName());
+		dto.setUserName(updated.getUserName());
+		dto.setPassword(updated.getPassword());
 
 		return dto;
 	}
@@ -189,6 +193,6 @@ public class UserController {
 		redirectViewPath.append("redirect:");
 		redirectViewPath.append(requestMapping);
 		return redirectViewPath.toString();
-	}*/
+	}
 
 }

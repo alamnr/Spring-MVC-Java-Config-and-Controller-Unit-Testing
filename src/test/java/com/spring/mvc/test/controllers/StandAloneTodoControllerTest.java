@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.Properties;
 
+import javax.persistence.EntityNotFoundException;
+
 import static org.hamcrest.Matchers.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +51,7 @@ import com.spring.mvc.test.WebTestConstants;
 import com.spring.mvc.test.common.controller.ErrorController;
 import com.spring.mvc.test.controllers.TodoController;
 import com.spring.mvc.test.dto.TodoDTO;
-import com.spring.mvc.test.exception.TodoNotFoundException;
+
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.service.TodoService;
 
@@ -224,7 +226,7 @@ public class StandAloneTodoControllerTest {
 	@Test
 	public void deleteById_TodoEntryNotFound_ShouldRender404View() throws Exception {
 
-		when(todoServiceMock.deleteById(ID)).thenThrow(new TodoNotFoundException(""));
+		when(todoServiceMock.deleteById(ID)).thenThrow(new EntityNotFoundException(""));
 
 		mockMvc.perform(get("/todo/delete/{id}", ID)).andExpect(status().isNotFound())
 				.andExpect(view().name(ErrorController.VIEW_NOT_FOUND))
@@ -284,7 +286,7 @@ public class StandAloneTodoControllerTest {
 	@Test
 	public void findById_TodoEntryNotFound_ShouldRender404View() throws Exception
 	{
-		when(todoServiceMock.findById(ID)).thenThrow(new TodoNotFoundException(""));
+		when(todoServiceMock.findById(ID)).thenThrow(new EntityNotFoundException(""));
 		
 		
 		mockMvc.perform(get("/todo/{id}",ID))
@@ -319,7 +321,7 @@ public class StandAloneTodoControllerTest {
 	@Test
 	public void showUpdateTodoForm_TodoEntryNotFound_ShouldRender404View() throws Exception
 	{
-		when(todoServiceMock.findById(ID)).thenThrow(new TodoNotFoundException(""));
+		when(todoServiceMock.findById(ID)).thenThrow(new EntityNotFoundException(""));
 		
 		mockMvc.perform(get("/todo/update/{id}",ID))
 		.andExpect(status().isNotFound())
@@ -412,7 +414,7 @@ public class StandAloneTodoControllerTest {
 	
 	 @Test
 	    public void update_TodoEntryNotFound_ShouldRender404View() throws Exception {
-	        when(todoServiceMock.update(isA(TodoDTO.class))).thenThrow(new TodoNotFoundException(""));
+	        when(todoServiceMock.update(isA(TodoDTO.class))).thenThrow(new EntityNotFoundException(""));
 
 	        mockMvc.perform(post("/todo/update")
 	                .contentType(MediaType.APPLICATION_FORM_URLENCODED)

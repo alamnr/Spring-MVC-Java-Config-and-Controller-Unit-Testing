@@ -201,6 +201,13 @@ public class AppUser //implements UserDetails
 			return this;
 		}
 	}
+	
+	 public void update(String password, String firstName, String lastName, String email ) {
+	        this.password = password;
+	        this.firstName = firstName;
+	        this.lastName = lastName;
+	        this.email = email;
+	    }
 
 	/*@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

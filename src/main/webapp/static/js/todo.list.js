@@ -1,29 +1,34 @@
 
 
-function openDialog(id)
+function openDialog(id,entityName)
 {
 
-    $(".well").on("click", "#delete-todo-link", function(e) {
+    $(".well").on("click", "#delete-link", function(e) {
         e.preventDefault();
 
-        var todoDeleteDialogTempate = Handlebars.compile($("#template-delete-todo-confirmation-dialog").html());
+        var todoDeleteDialogTempate = Handlebars.compile($("#template-delete-confirmation-dialog").html());
 
         $("#view-holder").append(todoDeleteDialogTempate());
-        $("#delete-todo-confirmation-dialog").modal();
+        $("#delete-confirmation-dialog").modal();
     })
 
-    $("#view-holder").on("click", "#cancel-todo-button", function(e) {
+    $("#view-holder").on("click", "#cancel-button", function(e) {
         e.preventDefault();
 
-        var deleteConfirmationDialog = $("#delete-todo-confirmation-dialog")
+        var deleteConfirmationDialog = $("#delete-confirmation-dialog")
         deleteConfirmationDialog.modal('hide');
         deleteConfirmationDialog.remove();
     });
 
-    $("#view-holder").on("click", "#delete-todo-button", function(e) {
+    $("#view-holder").on("click", "#delete-button", function(e) {
         e.preventDefault();
         //alert(id);
-        window.location.href = ctx+"/todo/delete/" + id;
+        if(entityName === 'todo'){
+        	window.location.href = ctx+"/todo/delete/" + id;
+        } else if (entityName === 'user'){
+        
+        	window.location.href = ctx+"/user/delete/" + id;
+        }
     });
 
 }
