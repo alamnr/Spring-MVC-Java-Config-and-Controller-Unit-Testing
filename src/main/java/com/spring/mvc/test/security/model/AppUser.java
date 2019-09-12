@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ import com.spring.mvc.test.model.Todo.Builder;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class AppUser //implements UserDetails 
+public class AppUser implements UserDetails 
 {
 	public static final int MAX_LENGTH_EMAIL = 50;
 	public static final int MAX_LENGTH_USERNAME = 50;
@@ -49,7 +50,7 @@ public class AppUser //implements UserDetails
 
 	private String password;
 
-	@ManyToMany(cascade = CascadeType.PERSIST)
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
 	private Set<Role> roles;
@@ -209,7 +210,7 @@ public class AppUser //implements UserDetails
 	        this.email = email;
 	    }
 
-	/*@Override
+	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
 		return AuthorityUtils.commaSeparatedStringToAuthorityList(
@@ -245,5 +246,5 @@ public class AppUser //implements UserDetails
 
 		return true;
 	}
-*/
+
 }

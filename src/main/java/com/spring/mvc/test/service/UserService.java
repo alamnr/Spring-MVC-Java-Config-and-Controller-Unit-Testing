@@ -62,14 +62,16 @@ public class UserService {
 		
 		AppUser appUser = appUserRepository.save(model);
 		
-		User userDetails= new User(appUser.getUserName(),appUser.getPassword(), 
+		/*User userDetails= new User(appUser.getUserName(),appUser.getPassword(), 
 				AuthorityUtils.commaSeparatedStringToAuthorityList(
 						appUser.getRoles().stream().map(obj->obj.getRoleName()).collect(Collectors.joining(","))));
 		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
-				userDetails.getAuthorities());
+				userDetails.getAuthorities());*/
 		
-		/*Authentication authentication = new UsernamePasswordAuthenticationToken(appUser, appUser.getPassword(),
-				appUser.getAuthorities());*/
+		
+		
+		Authentication authentication = new UsernamePasswordAuthenticationToken(appUser, appUser.getPassword(),
+				appUser.getAuthorities());
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
