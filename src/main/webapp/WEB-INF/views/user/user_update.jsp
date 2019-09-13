@@ -2,6 +2,8 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -33,6 +35,28 @@
 				<form:errors path="password" cssClass="help-inline" />
 			</div>
 		</div> --%>
+		
+		<div class="control-group">
+				<label for="userRole"><spring:message
+						code="label.user.role" />:</label>
+
+				<div class="controls">
+					<form:select id="userRole" path="roles" cssClass="selectPicker" multiple="true" >
+						<c:forEach items="${roleOptions}" var="item">
+						<c:choose>
+							<c:when test="${fn:contains(user.roles,item.id)  }">
+								<form:option value="${item.id}" selected="selected" label="${item.roleName}" />
+							</c:when>
+							<c:otherwise>
+								<form:option value="${item.id}"  label="${item.roleName}" />
+							</c:otherwise>
+						</c:choose>
+							
+						</c:forEach>
+					</form:select>
+					<form:errors path="roles" cssClass="help-inline" />
+				</div>
+			</div>
 		<div class="control-group">
 			<label for="userEmail"><spring:message
 					code="label.user.email" />:</label>

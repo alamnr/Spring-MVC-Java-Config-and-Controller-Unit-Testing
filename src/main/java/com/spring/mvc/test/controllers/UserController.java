@@ -1,8 +1,11 @@
 package com.spring.mvc.test.controllers;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -27,6 +30,7 @@ import com.spring.mvc.test.dto.TodoDTO;
 import com.spring.mvc.test.dto.UserDTO;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.security.model.AppUser;
+import com.spring.mvc.test.security.model.Role;
 import com.spring.mvc.test.service.TodoService;
 import com.spring.mvc.test.service.UserService;
 import com.spring.mvc.test.exception.EntityNotFoundException;
@@ -111,7 +115,7 @@ public class UserController {
     @RequestMapping(value = REQUEST_MAPPING_LIST, method = RequestMethod.GET)
 	public String findAllUser(Model model) {
 		LOGGER.debug("Rendering user list.");
-		List<AppUser> models = service.findAll();
+		List<AppUser> models = service.findAllUser();
         LOGGER.debug("Found {} user entries.", models.size());
 
 		model.addAttribute(MODEL_ATTRIBUTE_LIST, models);
@@ -171,6 +175,7 @@ public class UserController {
 		dto.setLastName(updated.getLastName());
 		dto.setUserName(updated.getUserName());
 		dto.setPassword(updated.getPassword());
+		dto.setRoles(updated.getRoles().stream().map(obj->obj.getId()).collect(Collectors.toList()));
 
 		return dto;
 	}
@@ -193,6 +198,15 @@ public class UserController {
 		redirectViewPath.append("redirect:");
 		redirectViewPath.append(requestMapping);
 		return redirectViewPath.toString();
+	}
+	
+	@ModelAttribute("roleOptions")
+	//public Map<String,String> getTypes(){
+	public List<Role> getRoles(){
+		/*Map<String, String> rolesMap = new LinkedHashMap<String, String>();
+		service.findAllRole().stream().forEach(obj->rolesMap.put(obj.getId().toString(), obj.getRoleName()));*/
+		
+		return service.findAllRole();
 	}
 
 }

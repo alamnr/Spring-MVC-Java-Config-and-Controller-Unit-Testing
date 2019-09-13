@@ -1,5 +1,6 @@
 package com.spring.mvc.test.dto;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,7 +35,7 @@ public class UserDTO {
 	@NotEmpty
 	private String password;
 
-	private Set<Role> roles;
+	private List<Long> roles;
 
 
 	public UserDTO() {
@@ -114,15 +115,12 @@ public class UserDTO {
 	}
 
 
-
-	public Set<Role> getRoles() {
-		return roles;
+	public void setRoles(List<Long> roles) {
+		this.roles = roles;
 	}
 
-
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public List<Long> getRoles() {
+		return roles;
 	}
 
 
@@ -160,7 +158,7 @@ public class UserDTO {
 			return this;
 		}
 		
-		public Builder roles(Set<Role> roles) {
+		public Builder roles(List<Long> roles) {
 			built.roles = roles;
 			return this;
 		}

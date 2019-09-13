@@ -203,11 +203,12 @@ public class AppUser implements UserDetails
 		}
 	}
 	
-	 public void update(String password, String firstName, String lastName, String email ) {
+	 public void update(String password, String firstName, String lastName, String email, Set<Role> roles ) {
 	        this.password = password;
 	        this.firstName = firstName;
 	        this.lastName = lastName;
 	        this.email = email;
+	        this.roles = roles;
 	    }
 
 	@Override

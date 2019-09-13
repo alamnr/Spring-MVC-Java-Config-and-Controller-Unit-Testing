@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.assertj.core.util.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,11 +80,12 @@ public class UserService {
 
 	public AppUser addUser(@Valid UserDTO userDTO) {
 		LOGGER.debug("Adding a new user entry with information: {}", userDTO);
-
+		Set<Role> roles = Sets.newHashSet(roleRepository.findRoleByIds(userDTO.getRoles()));	
         AppUser model = AppUser.getBuilder(userDTO.getUserName(),userDTO.getPassword())
                 .email(userDTO.getEmail())
                 .firstName(userDTO.getFirstName())
                 .lastName(userDTO.getLastName())
+                .roles(roles)
                 .build();
                 
 		
@@ -99,7 +101,7 @@ public class UserService {
         return deleted.get();
 	}
 
-	public List<AppUser> findAll() {
+	public List<AppUser> findAllUser() {
 		
 		return appUserRepository.findAll();
 	}
@@ -117,18 +119,22 @@ public class UserService {
 		return  found;		
 	}
 	
-	public AppUser update(UserDTO updated) throws EntityNotFoundException {
-		LOGGER.debug("Updating entity with information: {}", updated);
+	public AppUser update(UserDTO userDTO) throws EntityNotFoundException {
+		LOGGER.debug("Updating entity with information: {}", userDTO);
 
-        Optional<AppUser> model = appUserRepository.findById(updated.getId());
+        Optional<AppUser> model = appUserRepository.findById(userDTO.getId());
         LOGGER.debug("Found a user entry: {}", model);
-        
-        model.get().update(updated.getPassword(), updated.getFirstName(),updated.getLastName(),updated.getEmail());
+        Set<Role> roles = Sets.newHashSet(roleRepository.findRoleByIds(userDTO.getRoles()));
+        model.get().update(userDTO.getPassword(), userDTO.getFirstName(),userDTO.getLastName(),userDTO.getEmail(),roles);
         
         appUserRepository.save(model.get());
 
         return model.get();
 
+	}
+	
+	public List<Role> findAllRole(){
+		return roleRepository.findAll();
 	}
 
 	

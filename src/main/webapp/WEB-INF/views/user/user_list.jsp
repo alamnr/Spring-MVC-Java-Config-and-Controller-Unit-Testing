@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -45,7 +46,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${users}" var="user" varStatus="">
+						<c:forEach items="${users}" var="user" >
 							<tr>
 								<td><a
 									href='<spring:url value="/user/${user.id}"></spring:url>'>${user.id}</a>
@@ -55,11 +56,25 @@
 								<td>${user.email}</td>
 								<td>${user.firstName}</td>
 								<td>${user.lastName}</td>
-								<td></td>
-								<td>${todo.createdBy}</td>
-								<td>${todo.lastModifiedBy}</td>
-								<td>${todo.createdDate}</td>
-								<td>${todo.lastModifiedDate}</td>
+								<td>
+								<c:forEach items="${user.roles}" var="role"  varStatus="count" >
+									
+									<c:choose >
+										<c:when  test="${fn:length(user.roles) == count.index+1 }">
+											${role.roleName} 
+										</c:when>
+										<c:otherwise>
+											${role.roleName} ,
+										</c:otherwise>
+									</c:choose>
+								  
+								
+								</c:forEach>
+								</td>
+								<td>${user.createdBy}</td>
+								<td>${user.lastModifiedBy}</td>
+								<td>${user.createdDate}</td>
+								<td>${user.lastModifiedDate}</td>
 								<td style='white-space: nowrap'><a
 									href='<spring:url value="/user/update/${user.id}"></spring:url>'
 									class="btn btn-primary btn-xs"><spring:message
