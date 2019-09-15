@@ -1,5 +1,5 @@
-insert into todo (id,createdBy,description,lastModifiedBy,title, createdDate,lastModifiedDate) values (null, null,'Desc1',null, 'Title1',CURRENT_TIMESTAMP(),null);
-insert into todo (id,createdBy,description,lastModifiedBy,title, createdDate,lastModifiedDate) values (null, null,'Desc2',null, 'Title2',CURRENT_TIMESTAMP(),null);
+insert into todo (id,description,title, createdBy,lastModifiedBy,createdDate,lastModifiedDate) values (null, 'Desc1', 'Title1','DBA',null,CURRENT_TIMESTAMP(),null);
+insert into todo (id,description,title, createdBy,lastModifiedBy,createdDate,lastModifiedDate) values (null, 'Desc2', 'Title2','DBA',null,CURRENT_TIMESTAMP(),null);
 
 insert into role(id,rolename) values (1,'ROLE_USER');
 insert into role(id,rolename) values (2,'ROLE_FOO');

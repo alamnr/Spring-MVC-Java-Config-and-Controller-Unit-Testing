@@ -70,7 +70,7 @@
 									</form>
 								</c:when>
 								<c:otherwise>
-									<li><a href='<spring:url value="/login"/>'>Sign in</a></li>
+									<li><a href='<spring:url value="/loginForm"/>'>Sign in</a></li>
 									<li><a href='<spring:url value="/register"/>'><spring:message
 												code="user.register.title" /></a></li>
 								</c:otherwise>
