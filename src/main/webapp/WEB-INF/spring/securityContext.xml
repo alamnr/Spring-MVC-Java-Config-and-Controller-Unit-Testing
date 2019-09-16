@@ -11,6 +11,7 @@
 		base-package="com.spring.mvc.test.security.service" />
 	<context:component-scan
 		base-package="com.spring.mvc.test.security.provider" />
+	<context:component-scan base-package="com.spring.mvc.test.security.ldap"/>
 
 	<bean name="customAccessDeniedHandler"
 		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" />
@@ -85,7 +86,12 @@
 	<!-- LDAP Authentication -->
 	
 	<security:authentication-manager>
-		<security:ldap-authentication-provider user-dn-pattern="uid={0},ou=people" server-ref="ldapServer"/>
+		<!-- <security:ldap-authentication-provider user-dn-pattern="uid={0},ou=people" server-ref="ldapServer"
+			user-context-mapper-ref="contextMapper"/> -->
+			<security:ldap-authentication-provider user-search-filter="(uid={0})"
+			 group-search-base="ou=groups" group-search-filter="(uniqueMember={0})"
+			 group-role-attribute="cn" role-prefix="ROLE_" server-ref="ldapServer"
+			user-context-mapper-ref="contextMapper"/>
 	</security:authentication-manager>
 	
 	<security:ldap-server id="ldapServer" url="ldap://localhost:10389/dc=oreilly,dc=com" 

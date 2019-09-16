@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -54,6 +55,9 @@ public class AppUser implements UserDetails
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
 	private Set<Role> roles;
+	
+	@Transient
+	private Collection<? extends GrantedAuthority> authorities;
 
 	public Long getId() {
 		return id;
@@ -211,11 +215,19 @@ public class AppUser implements UserDetails
 	        this.roles = roles;
 	    }
 
+	 
+	 
+	 
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		return AuthorityUtils.commaSeparatedStringToAuthorityList(
-				this.getRoles().stream().map(obj -> obj.getRoleName()).collect(Collectors.joining(",")));
+		return this.authorities;
+		/*return AuthorityUtils.commaSeparatedStringToAuthorityList(
+				this.getRoles().stream().map(obj -> obj.getRoleName()).collect(Collectors.joining(",")));*/
 	}
 
 	@Override
