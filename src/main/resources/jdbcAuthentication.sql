@@ -1,11 +1,11 @@
 
 
-/* drop table authorities if exists;  */
+ drop table authorities if exists;  
 drop table users if exists;
 
 create table users(
     username varchar_ignorecase(50) not null primary key,
-    password varchar_ignorecase(50) not null,
+    password varchar_ignorecase(500) not null,
     enabled boolean not null
 );
 
@@ -17,9 +17,15 @@ create table authorities (
 );
 create unique index ix_auth_username on authorities (username,authority);
 
+/*  Bcrypt password   */
+/*
+insert into users (username,password,enabled)  values('nuser','$2a$11$Uqva8HvRUA4lfSDXMV0nI.Wuw6sIMEIxbD/QG2vlwla8buHoBUNTe',1);
+insert into users (username,password,enabled)  values('auser','$2a$11$Uqva8HvRUA4lfSDXMV0nI.Wuw6sIMEIxbD/QG2vlwla8buHoBUNTe',1);
+*/
+/* Sha with salted hash password  */
+insert into users (username,password,enabled)  values('nuser','73676a3b3d262a2c1f914ac18e18c1fcd969cafed9521aa71f3572f9b671ac1a280a29e13bee3613',1);
+insert into users (username,password,enabled)  values('auser','0c9cbc5bb09a272577d5f7eb9731fc8a8091b53dbd439cf50cc856bf7c6407544aeb151414863e6f',1);
 
-insert into users (username,password,enabled)  values('nuser','password',1);
-insert into users (username,password,enabled)  values('auser','password',1);
 /* insert into authorities(username,authority) values('nuser','ROLE_FOO');  */
 
 /* Group Based Access Control */

@@ -76,13 +76,17 @@
 				group-authorities-by-username-query="select g.id, g.group_name, ga.authority from groups g, 
 				group_members gm, group_authorities ga where gm.username = ? and g.id = ga.group_id 
 				and g.id = gm.group_id" />
-			<security:password-encoder ref="passwordEncoder"/>					
+			<!-- <security:password-encoder ref="passwordEncoder"/>	 -->
+			<!-- <security:password-encoder  hash="bcrypt"/>		 -->
+			<security:password-encoder ref="standardPasswordEncoder"/>		
 		</security:authentication-provider>
 	</security:authentication-manager>
 
 	<bean id="passwordEncoder"
 		class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
 		factory-method="getInstance" />
+		
+		<bean id="standardPasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"></bean>
 
 
 	<!-- <bean id="customFormLoginFilter" class="com.spring.mvc.test.security.custom.auth.filter.CustomAuthenticationFilter"> 
