@@ -7,158 +7,130 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<context:component-scan base-package="com.spring.mvc.test.security.service"/>
-	<context:component-scan base-package="com.spring.mvc.test.security.provider"/>
-	
+	<context:component-scan
+		base-package="com.spring.mvc.test.security.service" />
+	<context:component-scan
+		base-package="com.spring.mvc.test.security.provider" />
+
 	<bean name="customAccessDeniedHandler"
 		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" />
-		
+
 	<!-- Disable security on static resources -->
-    <security:http pattern="/static/**" security="none"/>
-    
-    <!-- <security:http  use-expressions="true" entry-point-ref="loginEntryPoint" >
-		
-		<security:custom-filter ref="customFormLoginFilter" position="FORM_LOGIN_FILTER"/>
-					
+	<security:http pattern="/static/**" security="none" />
+
+	<!-- <security:http use-expressions="true" entry-point-ref="loginEntryPoint" 
+		> <security:custom-filter ref="customFormLoginFilter" position="FORM_LOGIN_FILTER"/> 
 		<security:logout logout-url="/logout" logout-success-url="/loginForm?logout=true"/> 
-			
-		<security:access-denied-handler ref="customAccessDeniedHandler" />
-		
-		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
-		<security:intercept-url pattern="/users" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
-		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/user/add" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/user/delete/*" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
-		
-	</security:http> -->
-    
-	 <security:http auto-config="true" use-expressions="true" >
-		
-		<security:form-login login-page="/loginForm" login-processing-url="/login" username-parameter="custom_username"
-			password-parameter="custom_password" default-target-url="/" always-use-default-target="true"
-			authentication-failure-url="/loginForm?error=true"/>
-			
-		<security:logout logout-url="/logout" logout-success-url="/login?logout=true"/> 
-			
-		<security:access-denied-handler ref="customAccessDeniedHandler" />
-		
-		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
-		<security:intercept-url pattern="/users" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
-		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/user/add" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/user/delete/*" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
-		
-	</security:http> 
-	
-	<!-- <security:authentication-manager alias="authenticationManager"> -->
-		<!-- <security:authentication-provider user-service-ref="customUserDetailService">
-			<security:password-encoder ref="passwordEncoder"/>
-		</security:authentication-provider> -->
-		<!-- <security:authentication-provider  ref="customAuthenticationProvider"/>
-	</security:authentication-manager> -->
-	
-	<!-- Jdbc Authentication -->
-	<security:authentication-manager>
-		<security:authentication-provider>
-			<security:jdbc-user-service data-source-ref="jdbcDataSource"/>
-			<security:password-encoder ref="passwordEncoder"/>
-		</security:authentication-provider>
-	</security:authentication-manager>
+		<security:access-denied-handler ref="customAccessDeniedHandler" /> <security:intercept-url 
+		pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/> <security:intercept-url 
+		pattern="/users" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/> <security:intercept-url 
+		pattern="/todo/add" access="hasRole('ROLE_FOO')"/> <security:intercept-url 
+		pattern="/user/add" access="hasRole('ROLE_FOO')"/> <security:intercept-url 
+		pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/> <security:intercept-url 
+		pattern="/user/delete/*" access="hasRole('ROLE_FOO')"/> <security:intercept-url 
+		pattern="/accessDenied" access="isAuthenticated()"/> <security:intercept-url 
+		pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/> </security:http> -->
 
-	<bean id ="passwordEncoder" class ="org.springframework.security.crypto.password.NoOpPasswordEncoder" 
-		factory-method = "getInstance" /> 
-		
-		
-	<!-- <bean id="customFormLoginFilter" class="com.spring.mvc.test.security.custom.auth.filter.CustomAuthenticationFilter">
-		<property name="filterProcessesUrl" value="/login"/>
-		<property name="authenticationManager" ref="authenticationManager"/>
-		<property name="usernameParameter" value="custom_username"/>
-		<property name="passwordParameter" value="custom_password"/>
-		<property name="authenticationSuccessHandler" >
-			<bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-				<property name="defaultTargetUrl" value="/"/>
-				<property name="alwaysUseDefaultTargetUrl" value="true"/>
-			</bean>
-		</property>
-		<property name="authenticationFailureHandler">
-			<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-				<property name="defaultFailureUrl" value="/loginForm?error=true"/>
-			</bean>
-		</property>
-	</bean>
-	
-	<bean id="loginEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-		<constructor-arg value="/loginForm"/>
-	</bean> -->
-	
-	<!-- Disable security on static resources -->
-    <!-- <security:http pattern="/static/**" security="none"/>
+	<security:http auto-config="true" use-expressions="true">
 
-	<bean name="customAccessDeniedHandler"
-		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" /> -->
-
-<!-- This Bean is used to support spel in view jsp  while in <security:http use-expression="false"  >   -->
-	<!-- 
-	<bean
-		class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"></bean>
-
-	<security:http auto-config="true" use-expressions="true"> -->
-		<!-- <security:http-basic /> -->
-
-		<!-- <security:form-login login-page="/login"
+		<security:form-login login-page="/loginForm"
 			login-processing-url="/login" username-parameter="custom_username"
 			password-parameter="custom_password" default-target-url="/"
 			always-use-default-target="true"
-			authentication-failure-url="/login?error=true" />
+			authentication-failure-url="/loginForm?error=true" />
 
 		<security:logout logout-url="/logout"
-			logout-success-url="/login?logout=true" />
+			logout-success-url="/loginForm?logout=true" />
 
 		<security:access-denied-handler
-			ref="customAccessDeniedHandler" /> -->
+			ref="customAccessDeniedHandler" />
 
-		<!-- <security:access-denied-handler error-page="/accessDenied"/> -->
+		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
+		 <security:intercept-url pattern="/users" access="hasAnyRole('ROLE_FOO')"/> 
+		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_FOO')"/> 
+		<security:intercept-url pattern="/user/add" access="hasRole('ROLE_FOO')"/>
+		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/>
+		<security:intercept-url pattern="/user/delete/*" access="hasRole('ROLE_FOO')"/> 
+		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/> 
+		<!-- <security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/> -->
+		<security:intercept-url pattern="/" access="permitAll"/>
 
-
-		<!-- <security:intercept-url pattern="/login"
-			access="permitAll" />
-		<security:intercept-url pattern="/loginForm"
-			access="permitAll" />
-		<security:intercept-url pattern="/logout"
-			access="permitAll" />
-		<security:intercept-url pattern="/accessDenied"
-			access="permitAll" />
-		<security:intercept-url pattern="/static/**"
-			access="permitAll" />
-		<security:intercept-url
-			pattern="/todo/update/**" access="hasRole('ROLE_USER')" />
-		<security:intercept-url pattern="/todo/view/**"
-			access="hasRole('ROLE_USER')" />
-		<security:intercept-url pattern="/todo/**"
-			access="hasRole('ROLE_FOO')" />
-		<security:intercept-url pattern="/" access="ROLE_FOO,ROLE_USER"/>
-		<security:intercept-url pattern="/**"
-			access="hasAnyRole('ROLE_USER','ROLE_FOO')" />
-
-		<security:remember-me key="rememberMe"/>
 	</security:http>
 
+	<!-- <security:authentication-manager alias="authenticationManager"> -->
+	<!-- <security:authentication-provider user-service-ref="customUserDetailService"> 
+		<security:password-encoder ref="passwordEncoder"/> </security:authentication-provider> -->
+	<!-- <security:authentication-provider ref="customAuthenticationProvider"/> 
+		</security:authentication-manager> -->
+
+	<!-- Jdbc Authentication -->
+	<!-- <security:authentication-manager> <security:authentication-provider> 
+		<security:jdbc-user-service data-source-ref="jdbcDataSource"/> <security:password-encoder 
+		ref="passwordEncoder"/> </security:authentication-provider> </security:authentication-manager> -->
+
+	<!-- JDBC Group Based Authority Access -->
 	<security:authentication-manager>
 		<security:authentication-provider>
-			<security:user-service>
-				<security:user name="user" password="{noop}password"
-					authorities="ROLE_USER" />
-				<security:user name="admin" password="{noop}password"
-					authorities="ROLE_USER,ROLE_FOO" />
-			</security:user-service>
+			<security:jdbc-user-service
+				data-source-ref="jdbcDataSource"
+				group-authorities-by-username-query="select g.id, g.group_name, ga.authority from groups g, 
+				group_members gm, group_authorities ga where gm.username = ? and g.id = ga.group_id 
+				and g.id = gm.group_id" />
+			<security:password-encoder ref="passwordEncoder"/>					
 		</security:authentication-provider>
-	</security:authentication-manager> -->
+	</security:authentication-manager>
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
+		factory-method="getInstance" />
+
+
+	<!-- <bean id="customFormLoginFilter" class="com.spring.mvc.test.security.custom.auth.filter.CustomAuthenticationFilter"> 
+		<property name="filterProcessesUrl" value="/login"/> <property name="authenticationManager" 
+		ref="authenticationManager"/> <property name="usernameParameter" value="custom_username"/> 
+		<property name="passwordParameter" value="custom_password"/> <property name="authenticationSuccessHandler" 
+		> <bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler"> 
+		<property name="defaultTargetUrl" value="/"/> <property name="alwaysUseDefaultTargetUrl" 
+		value="true"/> </bean> </property> <property name="authenticationFailureHandler"> 
+		<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"> 
+		<property name="defaultFailureUrl" value="/loginForm?error=true"/> </bean> 
+		</property> </bean> <bean id="loginEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"> 
+		<constructor-arg value="/loginForm"/> </bean> -->
+
+	<!-- Disable security on static resources -->
+	<!-- <security:http pattern="/static/**" security="none"/> <bean name="customAccessDeniedHandler" 
+		class="com.spring.mvc.test.accessDeniedHander.CustomAccessDeniedHandler" 
+		/> -->
+
+	<!-- This Bean is used to support spel in view jsp while in <security:http 
+		use-expression="false" > -->
+	<!-- <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"></bean> 
+		<security:http auto-config="true" use-expressions="true"> -->
+	<!-- <security:http-basic /> -->
+
+	<!-- <security:form-login login-page="/login" login-processing-url="/login" 
+		username-parameter="custom_username" password-parameter="custom_password" 
+		default-target-url="/" always-use-default-target="true" authentication-failure-url="/login?error=true" 
+		/> <security:logout logout-url="/logout" logout-success-url="/login?logout=true" 
+		/> <security:access-denied-handler ref="customAccessDeniedHandler" /> -->
+
+	<!-- <security:access-denied-handler error-page="/accessDenied"/> -->
+
+
+	<!-- <security:intercept-url pattern="/login" access="permitAll" /> <security:intercept-url 
+		pattern="/loginForm" access="permitAll" /> <security:intercept-url pattern="/logout" 
+		access="permitAll" /> <security:intercept-url pattern="/accessDenied" access="permitAll" 
+		/> <security:intercept-url pattern="/static/**" access="permitAll" /> <security:intercept-url 
+		pattern="/todo/update/**" access="hasRole('ROLE_USER')" /> <security:intercept-url 
+		pattern="/todo/view/**" access="hasRole('ROLE_USER')" /> <security:intercept-url 
+		pattern="/todo/**" access="hasRole('ROLE_FOO')" /> <security:intercept-url 
+		pattern="/" access="ROLE_FOO,ROLE_USER"/> <security:intercept-url pattern="/**" 
+		access="hasAnyRole('ROLE_USER','ROLE_FOO')" /> <security:remember-me key="rememberMe"/> 
+		</security:http> <security:authentication-manager> <security:authentication-provider> 
+		<security:user-service> <security:user name="user" password="{noop}password" 
+		authorities="ROLE_USER" /> <security:user name="admin" password="{noop}password" 
+		authorities="ROLE_USER,ROLE_FOO" /> </security:user-service> </security:authentication-provider> 
+		</security:authentication-manager> -->
 
 	<!-- <bean id ="passwordEncoder" class ="org.springframework.security.crypto.password.NoOpPasswordEncoder" 
 		factory-method = "getInstance" /> -->
