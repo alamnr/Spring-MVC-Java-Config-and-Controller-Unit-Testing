@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -187,6 +189,12 @@ public class TodoController {
 		redirectViewPath.append("redirect:");
 		redirectViewPath.append(requestMapping);
 		return redirectViewPath.toString();
+	}
+	
+	@ModelAttribute("isUser")
+	public boolean isUser(Authentication auth)
+	{
+		return auth !=null && auth.getAuthorities().contains(AuthorityUtils.createAuthorityList("ROLE_USER").get(0));
 	}
 
 }
