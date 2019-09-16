@@ -45,12 +45,12 @@
 		<security:access-denied-handler
 			ref="customAccessDeniedHandler" />
 
-		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_FOO','ROLE_USER')"/>
-		 <security:intercept-url pattern="/users" access="hasAnyRole('ROLE_FOO')"/> 
-		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_FOO')"/> 
-		<security:intercept-url pattern="/user/add" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_FOO')"/>
-		<security:intercept-url pattern="/user/delete/*" access="hasRole('ROLE_FOO')"/> 
+		<security:intercept-url pattern="/todos" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
+		 <security:intercept-url pattern="/users" access="hasAnyRole('ROLE_ADMIN')"/> 
+		<security:intercept-url pattern="/todo/add" access="hasRole('ROLE_ADMIN')"/> 
+		<security:intercept-url pattern="/user/add" access="hasRole('ROLE_ADMIN')"/>
+		<security:intercept-url pattern="/todo/delete/*" access="hasRole('ROLE_ADMIN')"/>
+		<security:intercept-url pattern="/user/delete/*" access="hasRole('ROLE_ADMIN')"/> 
 		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/> 
 		<!-- <security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/> -->
 		<security:intercept-url pattern="/" access="permitAll"/>
@@ -69,24 +69,33 @@
 		ref="passwordEncoder"/> </security:authentication-provider> </security:authentication-manager> -->
 
 	<!-- JDBC Group Based Authority Access -->
-	<security:authentication-manager>
+	<!-- <security:authentication-manager>
 		<security:authentication-provider>
 			<security:jdbc-user-service
 				data-source-ref="jdbcDataSource"
 				group-authorities-by-username-query="select g.id, g.group_name, ga.authority from groups g, 
 				group_members gm, group_authorities ga where gm.username = ? and g.id = ga.group_id 
-				and g.id = gm.group_id" />
+				and g.id = gm.group_id" /> -->
 			<!-- <security:password-encoder ref="passwordEncoder"/>	 -->
 			<!-- <security:password-encoder  hash="bcrypt"/>		 -->
-			<security:password-encoder ref="standardPasswordEncoder"/>		
+		<!-- 	<security:password-encoder ref="standardPasswordEncoder"/>		
 		</security:authentication-provider>
+	</security:authentication-manager> -->
+	
+	<!-- LDAP Authentication -->
+	
+	<security:authentication-manager>
+		<security:ldap-authentication-provider user-dn-pattern="uid={0},ou=people" server-ref="ldapServer"/>
 	</security:authentication-manager>
+	
+	<security:ldap-server id="ldapServer" url="ldap://localhost:10389/dc=oreilly,dc=com" 
+			manager-dn="uid=admin,ou=system"  manager-password="secret"/>
 
-	<bean id="passwordEncoder"
+	<!-- <bean id="passwordEncoder"
 		class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
 		factory-method="getInstance" />
 		
-		<bean id="standardPasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"></bean>
+		<bean id="standardPasswordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"></bean> -->
 
 
 	<!-- <bean id="customFormLoginFilter" class="com.spring.mvc.test.security.custom.auth.filter.CustomAuthenticationFilter"> 
