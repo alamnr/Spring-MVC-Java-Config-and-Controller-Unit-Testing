@@ -26,9 +26,9 @@ public class Role {
 	
 	private String roleName;
 	
-	@ManyToMany(mappedBy="roles")
+	/*@ManyToMany(mappedBy="roles")
 	private Set<AppUser> users;
-
+*/
 	
 
 	public Long getId() {
@@ -47,14 +47,14 @@ public class Role {
 		this.roleName = roleName;
 	}
 	
-	public Set<AppUser> getUsers() {
+	/*public Set<AppUser> getUsers() {
 		return users;
 	}
 
 	public void setUsers(Set<AppUser> users) {
 		this.users = users;
 	}
-	
+	*/
 	
 	@Override
 	public String toString() {

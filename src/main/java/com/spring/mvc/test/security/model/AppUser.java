@@ -26,6 +26,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.mvc.test.dto.UserDTO;
 import com.spring.mvc.test.model.Todo;
 import com.spring.mvc.test.model.Todo.Builder;
@@ -51,6 +52,7 @@ public class AppUser implements UserDetails
 
 	private String password;
 
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })

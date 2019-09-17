@@ -9,11 +9,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.assertj.core.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,6 +37,7 @@ import com.spring.mvc.test.security.model.AppUser;
 import com.spring.mvc.test.security.model.Role;
 import com.spring.mvc.test.service.TodoService;
 import com.spring.mvc.test.service.UserService;
+import com.spring.mvc.test.util.UserUtil;
 import com.spring.mvc.test.exception.EntityNotFoundException;
 
 @Controller
@@ -207,6 +212,28 @@ public class UserController {
 		service.findAllRole().stream().forEach(obj->rolesMap.put(obj.getId().toString(), obj.getRoleName()));*/
 		
 		return service.findAllRole();
+	}
+	
+	@Autowired
+	UserUtil userUtil;
+	
+	@RequestMapping("/testPrePostFilterAnnotation")
+	@ResponseBody
+	public String getEmails(Authentication authentication)
+	{
+		
+		AppUser appUser  =  (AppUser)authentication.getPrincipal();
+		AppUser otherUser = AppUser.getBuilder("otherUser", "password").email("other@gmail.com").build();
+		return userUtil.getEmails(Arrays.asList(new AppUser[] {appUser,otherUser}));
+	}
+	
+	@RequestMapping("/allUsers")
+	@ResponseBody
+	@PostFilter("principal.userName == filterObject.createdBy")
+	public List<AppUser> getUsers()
+	{
+		List<AppUser> users = service.findAllUser();
+		return users;
 	}
 
 }

@@ -21,7 +21,7 @@ public class CustomUserDetailsContextMapper implements UserDetailsContextMapper 
 		AppUser appUser = new AppUser();
 		appUser.setFirstName(ctx.getStringAttribute("givenName"));
 		appUser.setLastName(ctx.getStringAttribute("sn"));
-		appUser.setEmail(ctx.getStringAttribute("email"));
+		appUser.setEmail(ctx.getStringAttribute("mail"));
 		appUser.setUserName(username);
 		appUser.setAuthorities(authorities);
 		return appUser;
