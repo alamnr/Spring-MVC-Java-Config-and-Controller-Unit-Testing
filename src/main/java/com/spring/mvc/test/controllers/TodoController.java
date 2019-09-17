@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -133,7 +134,9 @@ public class TodoController {
 	}
 
 	@RequestMapping(value = "/todo/update/{id}", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RolesAllowed("ROLE_ADMIN")
+	//@RolesAllowed("ROLE_ADMIN,ROLE_USER")
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	//@PostAuthorize("hasRole('ROLE_ADMIN')")
     public String showUpdateTodoForm(@PathVariable("id") Long id, Model model) throws EntityNotFoundException {
         LOGGER.debug("Rendering update to-do entry form for to-do entry with id: {}", id);
