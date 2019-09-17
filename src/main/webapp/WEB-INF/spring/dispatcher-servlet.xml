@@ -3,9 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+	xmlns:repository="http://www.springframework.org/schema/data/repository"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/data/repository https://www.springframework.org/schema/data/repository/spring-repository.xsd">
 
 	<mvc:annotation-driven />
 
@@ -26,12 +30,14 @@
 				<prop key="com.spring.mvc.test.exception.TodoNotFoundException">error/404</prop>
 				<prop key="java.lang.Exception">error/error</prop>
 				<prop key="java.lang.RuntimeException">error/error</prop>
+				<prop key="org.springframework.security.access.AccessDeniedException">forbidden/accessDenied</prop>
 			</props>
 		</property>
 		<property name="statusCodes">
 			<props>
 				<prop key="error/404">404</prop>
 				<prop key="error/error">500</prop>
+				<!-- <prop key="forbidden/accessDenied">403</prop> -->
 			</props>
 		</property>
 	</bean>
@@ -58,6 +64,6 @@
 	</bean>		
 	</mvc:interceptors>
 	
-
+	<security:global-method-security pre-post-annotations="enabled"/>
 
 </beans>
