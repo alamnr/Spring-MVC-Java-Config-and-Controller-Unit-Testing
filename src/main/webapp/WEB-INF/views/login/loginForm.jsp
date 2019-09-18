@@ -39,10 +39,11 @@
 				id="custom-auth-field" name="make" class="form-control" />
 		</div> -->
 
-		<%-- <div class="form-group">
+		<%--  <div class="form-group">
 				<label for="remember"><spring:message code="label.login.rememberMe"></spring:message></label>
 				<input type="checkbox" id="remember" name="remember-me"  >
-			</div> --%>
+				<!-- <input type="checkbox" id="remember" name="rememberMe"  > -->
+			</div> --%> 
 		 <sec:csrfInput /> 
 
 		<%-- <input type="hidden" name="${_csrf.parameterName}"

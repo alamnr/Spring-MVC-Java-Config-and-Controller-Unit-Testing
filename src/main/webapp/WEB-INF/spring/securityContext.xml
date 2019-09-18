@@ -56,7 +56,8 @@
 		<security:intercept-url pattern="/accessDenied" access="isAuthenticated()"/> 
 		<!-- <security:intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/> -->
 		<security:intercept-url pattern="/" access="permitAll"/>
-
+		
+		<!-- <security:remember-me key="rememberMe"  /> -->
 	</security:http>
 
 	<!-- <security:authentication-manager alias="authenticationManager"> -->
